@@ -8,9 +8,8 @@
 
 <!--A one paragraph summary of what the software will do.-->
 
-This is an example paragraph written in markdown. You can use *italics*, **bold**, and other formatting options. You can also <u>use inline html</u> to format your text. The example sections included in this document are not necessarily all the sections you will want, and it is possible that you won't use all the one's provided. It is your responsibility to create a document that adequately conveys all the information about your project specifications and requirements.
-
-Please view this file's source to see `<!--comments-->` with guidance on how you might use the different sections of this document. 
+The goal of this project is to create a sudoku web app that mimics the process of completing a sudoku puzzle on
+"analog" pencil and paper. Because of this goal the user interface should be just as intuitive as a pencil and paper, providing the user with all the advantages of a physical puzzle solving experience while still being fully online. 
 
 ### Customer
 
@@ -20,25 +19,21 @@ Please view this file's source to see `<!--comments-->` with guidance on how you
 
 <!--This section lists the behavior that the users see. This information needs to be presented in a logical, organized fashion. It is most helpful if this section is organized in outline form: a bullet list of major topics (e.g., one for each kind of user, or each major piece of system functionality) each with some number of subtopics.-->
 
-Here is a user requirements sample from [Crookshanks](https://learning-oreilly-com.ezproxy.library.wisc.edu/library/view/practical-software-development/9781484206201/9781484206218_Ch02.xhtml):
-
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| R11  | Users should not have to sign into the system; their current network login should be used for identification. | Med      | Done   |
-| R12  | The user should pick a project first; the tasks available are a derivative of the project. | High     | Open   |
-| R13  | A full-time employee should not be able to submit a time card with less than 40 hours per week recorded. | High     | Open   |
-| R14  | A contractor can submit any number of hours up to 60 without special approval. | Med      | Open   |
-| R15  | A team lead can see his/her team's time cards before they are submitted but cannot approve them until the user submits it. | High     | Open   |
+| R1  | Users shall be able to solve the sudoku puzzle presented. | High      | Open   |
+| R2  | User shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet at request.| High     | Open   |
+| R3  | Users shall have access to multiple versions of sudoku puzzles. | High     | Open   |
+| R4  | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving | Med      | Open   |
+| R5  | Users shall be able to have an account within the sudoku application.  | Low     | Open   |
+| R5.1  | Users shall be able to login to their account with a previously saved username and password.  | Low     | Open   |
+| R5.2  | Users shall be able to save sudoku puzzles to their account to can be selected upon login.  |Low| Open|
+| R6  | Users shall be able to attempt to solve the sudoku puzzle using temporary marking tools.  | Low     | Open   |
+
+
 
 <div align="center"><small><i>Excerpt from Crookshanks Table 2-2 showing example user requirements for a timekeeping system</i></small></div>
 
-- You 
-  - Can
-    - Use
-- Bullet
-  - Points
-    - In
-    - Markdown
 
 ### Use Cases & User Stories
 
@@ -125,61 +120,6 @@ end
 A <-->|"REST API"| B
 B <-->|SQLAlchemy| C
 ```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Javascript: Vue)
-end
-	
-subgraph Back End
-	B(Javascript: Express)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|"REST API"| B
-B <--> C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Static JS, CSS, HTML)
-end
-	
-subgraph Back End
-	B(Java: SpringBoot)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|HTTP| B
-B <--> C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Mobile App)
-end
-	
-subgraph Back End
-	B(Python: Django)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|REST API| B
-B <-->|Django ORM| C
-```
-
 
 
 #### Database
