@@ -83,30 +83,11 @@ You can make headings at different levels by writing `# Heading` with the number
 
 #### Technology Stack
 
-Here are some sample technology stacks that you can use for inspiration:
 
 ```mermaid
 flowchart RL
 subgraph Front End
-	A(Javascript: React)
-end
-	
-subgraph Back End
-	B(Python: Django with \nDjango Rest Framework)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|"REST API"| B
-B <-->|Django ORM| C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Javascript: Vue)
+	A(Typescript: React)
 end
 	
 subgraph Back End
