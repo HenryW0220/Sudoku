@@ -231,6 +231,10 @@ DjangoBackend -->> ReactFrontend: JSON Response
 deactivate DjangoBackend
 ```
 
+#### System Architecture Diagram
+![System Architecture Diagram](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/mondaywednesdaylecture/T_24/cs506-team24/-/raw/main/docs/System_Architecture_Diagram.png)
+
+
 ### Standards & Conventions
 
 <!--Here you can document your coding standards and conventions. This includes decisions about naming, style guides, etc.-->
