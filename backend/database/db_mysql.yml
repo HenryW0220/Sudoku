@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  db_mysql:
+    image: mysql/mysql-server:latest
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Will make an env variable
+      MYSQL_DATABASE: team24db  
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - db-mysql:/var/lib/mysql
+    ports: 
+      - "53316:3306"
+
+  flask_app:
+    build: .
+    image: t24_flask_image
+    ports:
+      - "5000:5000"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DATABASE_URL: mysql+pymysql://root:${MYSQL_ROOT_PASSWORD}@db_mysql:53316/team24db
+    depends_on:
+      - db_mysql
+
+volumes:
+  db-mysql:
