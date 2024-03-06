@@ -27,10 +27,12 @@ def retrieve_board():
 # POST endpoint to store a user's Sudoku board in the MySQL database.
 @app.post('/boards/store_board')
 def store_board():
-    # Given a list of numbers
+    # Given a list of numbers (from the request body?)
+    # Generate a board ID? or is it given?
     # Convert to a string of numbers
-    # Store with unique board ID
-    pass
+    # Create a new instance of the board
+    # Store it in the database
+    return 'Board stored successfully with id _'
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
