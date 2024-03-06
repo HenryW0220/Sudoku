@@ -8,6 +8,13 @@ app = Flask(__name__)
 
 #db = SQLAlchemy(app)
 
+#SudokuBoard is like the DB? or just query from it directly?
+# class SudokuBoard(db.Model):
+#     __tablename__ = 'sudoku_boards'
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     board = db.Column(db.String)
+
 # GET endpoint to retrieve a user's Sudoku board from the MySQL database.
 @app.get('/boards/retrieve_board')
 def retrieve_board():
@@ -18,7 +25,9 @@ def retrieve_board():
     sudoku_board = SudokuBoard.query.filter(SudokuBoard.board.startswith(f"{board_id},")).first()
         # id column?
         #sudoku_board = SudokuBoard.query.filter_by(id=board_id).first()
-    # Parse the list of numbers into an array
+        #query = f"SELECT board FROM sudoku_boards WHERE id = {board_id}"
+        #result = db.session.execute(query)
+    # Parse the list of numbers into an array (list?)
     board_numbers = [int(num) for num in sudoku_board.board]
         #board_array = np.array(board_list)
     # Return the array of numbers
@@ -28,8 +37,11 @@ def retrieve_board():
 @app.post('/boards/store_board')
 def store_board():
     # Given a list of numbers (from the request body?)
+    board_numbers = request.json.get('numbers')
     # Generate a board ID? or is it given?
+
     # Convert to a string of numbers
+
     # Create a new instance of the board
     # Store it in the database
     return 'Board stored successfully with id _'
