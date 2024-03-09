@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  flaskapp:
+    restart: always
+    build: ./app
+    command: sh -c "sleep 20s ; python3 ./app.py"
+    ports:
+      - "5002:5002"
+    depends_on:
+      - db
+
+  db:
+    image: mysql/mysql-server:latest
+    restart: always
+    build: ./db/
+    environment: 
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: TEST_DB
+    ports:
+      - "3306:3306"
+  
