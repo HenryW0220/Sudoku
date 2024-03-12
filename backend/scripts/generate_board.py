@@ -1,6 +1,7 @@
 import copy
 import random
-
+#import "../app/app.py"
+import argparse
 ## Class heavily influenced by example found here https://medium.com/codex/building-a-sudoku-solver-and-generator-in-python-1-3-f29d3ede6b23
 class Board:
     def __init__(self, boardCode=None):
@@ -51,17 +52,17 @@ class Board:
             if self.board[row][space[1]] == num:
                 return False
 
-        _internalBoxRow = space[0] // 3
-        _internalBoxCol = space[1] // 3
+        boxRow = space[0] // 3
+        boxCol = space[1] // 3
 
         for i in range(3): # check to see if internal box already has number
             for j in range(3):
-                if self.board[i + (_internalBoxRow * 3)][j + (_internalBoxCol * 3)] == num:
+                if self.board[i + (boxRow * 3)][j + (boxCol * 3)] == num:
                     return False
         
         return True
     
-    def boardToCode(self, input_board=None): # turn a pre-existing board into a code
+    def boardToCode(self, input_board=None): # turn a pre-existing board into a boardCode
         if input_board:
             _boardCode = ''.join([str(i) for j in input_board for i in j])
             return _boardCode
@@ -239,12 +240,12 @@ if __name__ == '__main__':
     # Usage example
     board = Board()
 
-    question_board_code = board.generateQuestionBoardCode(1) # generates a medium level sudoku
-    print(question_board_code[0])
+    question_board = board.generateQuestionBoardCode(1) # generates a medium level sudoku
+    print(question_board[0])
+    print (question_board[1])
 
-    boardCode = '300105000060200000008090060050000800800007040071009035000900084704006000902048300'
-    solved_board_code = Board(boardCode).solveForCode() # solves a hard level sudoku 
+    # boardCode = '300105000060200000008090060050000800800007040071009035000900084704006000902048300'
+    # solved_board_code = Board(boardCode).solveForCode() # solves a hard level sudoku 
     
-    # TODO plug into backend using correct formatting
-    # TODO interpret difficulty, 1 2 3 based on number of squares removed 
+    # TODO plug into backend, import backend functionality 
     # TODO plug into frontend using correct formatting
