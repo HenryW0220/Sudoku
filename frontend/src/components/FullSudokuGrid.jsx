@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 
 export default function GridBox(props) {
 
-    
+    const [sudokuBoard, setSudokuBoard] = useState([]);
     useEffect(() => {
         //boards id is mock for testing
         fetch('http://localhost:5002/boards/retrieve_board/1002')
             .then(res => res.json()).then(json => {
+              setSudokuBoard(json);
+              console.log(json);
                 //get the 1D array of numbers
                     //save the board_id
                     //save the board content in a 9x9 int array
