@@ -1,8 +1,12 @@
 from typing import List, Dict
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import mysql.connector
 
+
 app = Flask(__name__)
+
+CORS(app)
 
 @app.route('/') 
 def setup():
@@ -51,7 +55,10 @@ def retrieve_board(board_id):
         board_contents = [int(num) for num in board_contents.split()]
         # Parse result into list with id followed by contents
         sudoku_board = [board_id] + board_contents
-        return sudoku_board
+
+        response = jsonify(sudoku_board)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     else:
         return jsonify({'message': 'Invalid Board ID: Board Not Found'}), 404
 

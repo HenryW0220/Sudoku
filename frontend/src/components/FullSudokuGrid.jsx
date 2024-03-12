@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 
 
 export default function GridBox(props) {
+    const url = `http://127.0.0.1:5002/boards/retrieve_board/1002`;
 
     const [sudokuBoard, setSudokuBoard] = useState([]);
     useEffect(() => {
         //boards id is mock for testing
-        fetch('http://localhost:5002/boards/retrieve_board/1002')
+        fetch(url)
             .then(res => res.json()).then(json => {
               setSudokuBoard(json);
               console.log(json);
