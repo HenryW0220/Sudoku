@@ -1,10 +1,10 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import GridBox from "./components/FullSudokuGrid.jsx"
+import FullSudokuGrid from './components/FullSudokuGrid.jsx';
 
 function App() {
-  return <GridBox/>
+  return <FullSudokuGrid/>
 }
 
 export default App;
