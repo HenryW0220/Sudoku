@@ -12,6 +12,7 @@ export default function FullSudokuGrid() {
     fetch('http://localhost:5002/boards/retrieve_board/1002')//1002 boardID is mock for testing
       .then(res => res.json()).then(json => {
         setSudokuBoard(json.map((element: any) => {
+          console.log(element)
           return {  
             value: element,
             shaded: false
@@ -20,20 +21,25 @@ export default function FullSudokuGrid() {
         
         
         //boardID= sudokuBoard[0]//save the board_id. parse?
-        console.log(json)        //get the 1D array representation of our boards numbers. NOTE: first element is boardID
-        console.log(sudokuBoard)
+        //console.log(json)        //get the 1D array representation of our boards numbers. NOTE: first element is boardID
+        
         let count= 1 //used to know what value 
         //save the board content in a 9x9 int array
         for(let i=0; i< 9; i++){
           for(let j=0; j< 9; j++){
-            board[i][j]= sudokuBoard[count]
-            count++
+            //board[i][j]= sudokuBoard[count]
+            //count++
           }
         }
     })
     .catch(error => console.error('Fetch Error:', error))
     // eslint-disable-next-line
   }, []); 
+
+  useEffect(()=> {
+    console.log(sudokuBoard)
+  } , [sudokuBoard])
+
   //3x3 small sudoku grid, made to make boarder desing that sudoku has
   //make a 3x3 out of these
   //TODO:
