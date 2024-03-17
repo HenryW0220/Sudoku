@@ -3,7 +3,7 @@
 ## TeamName
 
 Pseudoku
-![TeamLogo](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/mondaywednesdaylecture/T_24/cs506-team24/-/tree/32-jpwolf-product-manager-product-backlog-and-requirements-work-sprint-1/docs/CS506_Team_Logo.png)
+![Team Logo](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/mondaywednesdaylecture/T_24/cs506-team24/-/raw/issues/1/designs/CS506_-_Team_Logo.png)
 
 ### Project Abstract
 
