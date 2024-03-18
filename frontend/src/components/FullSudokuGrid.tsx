@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-//import SudokuCell from "./SudokuCell";
+import SudokuCell from "./SudokuCell";
 
-//explicitly telling our machine what our sudokuBoard array elements are
+//explicitly telling the machine what our sudokuBoard array elements are
 interface SudokuElement {
   value: number;
   shaded: boolean;
@@ -18,13 +18,7 @@ export default function FullSudokuGrid() {
     fetch('http://localhost:5002/boards/retrieve_board/1002')//1002 boardID is mock for testing
       .then(res => res.json()).then(json => {
 
-        //temporary testing 
-        let mockList= []
-        for(let i=1; i<= 81; i++){
-          mockList[i]= i;
-        }
-
-        let sudokuElementList: SudokuElement[] = mockList.slice(1, json.length).map((element: any) => {
+        let sudokuElementList: SudokuElement[] = json.slice(1).map((element: any) => {
           return {
             value: element,
             shaded: false
@@ -42,6 +36,8 @@ export default function FullSudokuGrid() {
 
 
 
+  //setting up our nine 9x9 sudoku sectors
+  //reason for this implementation is to have outline design you'd see in sudoku board
   const [sector1SudokuGrid, setSector1SudokuGrid] = useState<number[]>( [] ) 
   const [sector2SudokuGrid, setSector2SudokuGrid] = useState<number[]>( [] ) 
   const [sector3SudokuGrid, setSector3SudokuGrid] = useState<number[]>( [] ) 
@@ -53,8 +49,9 @@ export default function FullSudokuGrid() {
   const [sector9SudokuGrid, setSector9SudokuGrid] = useState<number[]>( [] ) 
 
 
+  //once we fetch api data, we fill in our sudoku Board sectors
   useEffect(() => {
-    if(sudokuBoard.length > 0){      
+    if(sudokuBoard.length === 81){      
       setSector1SudokuGrid( make9SectorSudokuBox(0,0))
       setSector2SudokuGrid( make9SectorSudokuBox(0,1))
       setSector3SudokuGrid( make9SectorSudokuBox(0,2))
@@ -67,30 +64,8 @@ export default function FullSudokuGrid() {
     }
   }, [sudokuBoard]);
 
-  //testing useEffects
-  useEffect(() => {
-    console.log(sector1SudokuGrid)
-  }, [sector1SudokuGrid]);
 
-  useEffect(() => {
-    console.log(sector2SudokuGrid)
-  }, [sector2SudokuGrid]);
-
-  useEffect(() => {
-    console.log(sector3SudokuGrid)
-  }, [sector3SudokuGrid]);
-
-  useEffect(() => {
-    console.log(sector4SudokuGrid)
-  }, [sector4SudokuGrid]);
-
-  useEffect(() => {
-    console.log(sector5SudokuGrid)
-  }, [sector5SudokuGrid]);
-
-
-
-
+  //helper method to set up all sudoku board sectors
   const make9SectorSudokuBox= (rowSector: number, colSector: number) => {
     let inputs: number[]= []
 
@@ -107,80 +82,82 @@ export default function FullSudokuGrid() {
     return inputs
   }
 
-  return <div className="grid grid-cols-3 gap-4">
-            <div className="grid grid-cols-3 outline-2 gap-4">
+
+
+  return <div className="grid grid-cols-3 outline outline-4 m-8 rounded-xl">
+            
+            <div className="grid grid-cols-3 outline outline-2 rounded-tl-lg">
               {
                 sector1SudokuGrid.map((val, index) => <div key={index*1 + "a"}>
-                  <input value={val} type="button" min="1" max="9"></input>
+                  <SudokuCell initValue={val}></SudokuCell>
                 </div>)
               }
             </div>
 
-            <div className="grid grid-cols-3 outline-2 gap-4">
+            <div className="grid grid-cols-3 outline outline-2">
               {
-                sector2SudokuGrid.map((val, index) => <div key={index+ "b"}>
-                  <input value={val} type="button" min="1" max="9"></input>
+                sector4SudokuGrid.map((val, index) => <div key={index+ "b"}>
+                  <SudokuCell initValue={val}></SudokuCell>
                 </div>)
               }
             </div>
 
-            <div className="grid grid-cols-3 outline-2 gap-4">
+            <div className="grid grid-cols-3 outline outline-2 rounded-tr-lg">
               {
-                sector3SudokuGrid.map((val, index) => <div key={index+ "c"}>
-                  <input value={val} type="button" min="1" max="9"></input>
-                </div>)
+                sector7SudokuGrid.map((val, index) => <div key={index+ "c"}>
+                  <SudokuCell initValue={val}></SudokuCell>                </div>)
               }
             </div>
 
-            <div className="grid grid-cols-3 outline-2 gap-4">
+            <div className="grid grid-cols-3 outline outline-2">
               {
-                sector4SudokuGrid.map((val, index) => <div key={index + "d"}>
-                  <input value={val} type="button" min="1" max="9"></input>
+                sector2SudokuGrid.map((val, index) => <div key={index + "d"}>
+                  <SudokuCell initValue={val}></SudokuCell>
                 </div>)
               }
             </div>
 
-            <div className="grid grid-cols-3 outline-2 gap-4">
+            <div className="grid grid-cols-3 outline outline-2">
               {
                 sector5SudokuGrid.map((val, index) => <div key={index + "e"}>
-                  <input value={val} type="button" min="1" max="9"></input>
+                  <SudokuCell initValue={val}></SudokuCell>
                 </div>)
               }
             </div>
 
-            <div className="grid grid-cols-3 outline-2 gap-4">
+            <div className="grid grid-cols-3 outline outline-2">
               {
-                sector6SudokuGrid.map((val, index) => <div key={index +  "f"}>
-                  <input value={val} type="button" min="1" max="9"></input>
+                sector8SudokuGrid.map((val, index) => <div key={index +  "f"}>
+                  <SudokuCell initValue={val}></SudokuCell>
                 </div>)
               }
             </div>
 
-            <div className="grid grid-cols-3 outline-2 gap-4">
+            <div className="grid grid-cols-3 outline outline-2 rounded-bl-lg">
               {
-                sector7SudokuGrid.map((val, index) => <div key={index + "g"}>
-                  <input value={val} type="button" min="1" max="9"></input>
+                sector3SudokuGrid.map((val, index) => <div key={index + "g"}>
+                  <SudokuCell initValue={val}></SudokuCell>
                 </div>)
               }
             </div>
 
-            <div className="grid grid-cols-3 outline-2 gap-4">
+            <div className="grid grid-cols-3 outline outline-2">
               {
-                sector8SudokuGrid.map((val, index) => <div key={index +  "h"}>
-                  <input value={val} type="button" min="1" max="9"></input>
+                sector6SudokuGrid.map((val, index) => <div key={index +  "h"}>
+                  <SudokuCell initValue={val}></SudokuCell>
                 </div>)
               }
             </div>
 
-            <div className="grid grid-cols-3 outline-2 gap-4">
+            <div className="grid grid-cols-3 outline outline-2 rounded-br-lg">
               {
                 sector9SudokuGrid.map((val, index) => <div key={index +  "i"}>
-                  <input value={val} type="button" min="1" max="9"></input>
+                  <SudokuCell initValue={val}></SudokuCell>
                 </div>)
               }
             </div>
-          
                   
-        </div>
-          
+        </div>          
 }
+
+ 
