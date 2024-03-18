@@ -1,9 +1,8 @@
 # Requirements and Specification Document
 
 ## TeamName
-
-Pseudoku
-![TeamLogo](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/mondaywednesdaylecture/T_24/cs506-team24/-/tree/32-jpwolf-product-manager-product-backlog-and-requirements-work-sprint-1/docs/CS506_Team_Logo.png)
+### Pseudoku
+![Team Logo](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/mondaywednesdaylecture/T_24/cs506-team24/-/raw/main/docs/CS506_Team_Logo.png)
 
 ### Project Abstract
 
