@@ -17,5 +17,5 @@ Kill all containers using:
 docker kill $(docker ps -q)
 ```
 
-open http://localhost:5002/ to view output
+open http://localhost:5002/ to view flask output
 
