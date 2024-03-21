@@ -37,8 +37,6 @@ We have created a high fidelity prototype of our Sudoku application using Figma.
 
 
 #### Technology Stack
-
-
 ```mermaid
 flowchart RL
 subgraph Front End
@@ -57,10 +55,10 @@ A <-->|"REST API"| B
 B <-->|SQLAlchemy| C
 ```
 
-
 #### Database
 Usage information:
 Storing and retrieving board information from the database in this format:
+
     [
         boardId,
         num00,
