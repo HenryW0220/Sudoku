@@ -35,6 +35,8 @@ Sprint 3: Apr 10-Apr 29
 4. Ensure no containers are already runnning `docker kill $(docker ps -q)`
 5. Spin up backend and database containers using `docker-compose up -d --build`
 6. Wait around 1 minute for containers to spin up
+7. Can view Flask output for testing at `http://localhost:5002/` (**WARNING: FOR BACKEND TESTING ONLY**)
+8. When finished, run `docker compose down`
 ### Setup Frontend
 1. Open a separate terminal (NOT ON CSL MACHINE)
 2. Tunnel into for frontend using `ssh -L 3000:localhost:3000 -L 5002:localhost:5002 <username>@cs506-team-24.cs.wisc.edu`
