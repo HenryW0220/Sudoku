@@ -33,7 +33,7 @@ The goal of this project is to create a sudoku web app that mimics the process o
 
 
 ### Figma Prototype
-We have created a high fidelity prototype of our Sudoku application using Figma. It can be found [here.](https://www.figma.com/file/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=0%3A1&mode=design&t=3KzTdZH16Ck1aMVe-1)
+We have created a high fidelity prototype of our Sudoku application using Figma. It can be found [here](https://www.figma.com/file/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=0%3A1&mode=design&t=3KzTdZH16Ck1aMVe-1).
 
 
 #### Technology Stack
@@ -62,21 +62,13 @@ B <-->|SQLAlchemy| C
 Usage information:
 Storing and retrieving board information from the database in this format:
 ```mermaid
-flowchart RL
-subgraph Front End
-	A(Typescript: React)
-end
-	
-subgraph Back End
-	B(Python: Flask)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|"REST API"| B
-B <-->|SQLAlchemy| C
+[
+    boardId,
+    num00,
+    num01,
+    num02,
+    ...
+]
 ```
 <!-- ```mermaid
 [

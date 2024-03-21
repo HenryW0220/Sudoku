@@ -30,18 +30,27 @@ Sprint 3: Apr 10-Apr 29
 
 ## Scrum Masters and Product Owners
 Sprint 0/1:
+
     Scrum Master - Andrew Logan
+    
     Product Owner - Jackson Wolf
 
+
 Sprint 2:
+
     Scrum Master - Juan Carlos Eulogio Martinez
+
     Product Owner - Katherine Lesavich
 
+
 Sprint 3:
+
     Scrum Master - Elaine Li
+
     Product Owner - Henry Weng
 
 
+
 ## Figma Prototype
-We have created a high fidelity prototype of our Sudoku application using Figma. It can be found [here.](https://www.figma.com/file/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=0%3A1&mode=design&t=3KzTdZH16Ck1aMVe-1)
+We have created a high fidelity prototype of our Sudoku application using Figma. It can be found [here](https://www.figma.com/file/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=0%3A1&mode=design&t=3KzTdZH16Ck1aMVe-1).
 
