@@ -61,24 +61,13 @@ B <-->|SQLAlchemy| C
 #### Database
 Usage information:
 Storing and retrieving board information from the database in this format:
-```mermaid
-[
-    boardId,
-    num00,
-    num01,
-    num02,
-    ...
-]
-```
-<!-- ```mermaid
-[
-    boardId,
-    num00,
-    num01,
-    num02,
-    ....
-]
-``` -->
+    [
+        boardId,
+        num00,
+        num01,
+        num02,
+        ...
+    ]
 
 
 #### System Architecture Diagram
