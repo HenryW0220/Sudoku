@@ -20,14 +20,17 @@ The goal of this project is to create a sudoku web app that mimics the process o
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| R1  | Users shall be able to solve the sudoku puzzle presented. | High      | Open   |
-| R2  | User shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet at request.| High     | Open   |
-| R3  | Users shall have access to multiple versions of sudoku puzzles. | High     | Open   |
-| R4  | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving. | Med      | Open   |
-| R5  | Users shall be able to have an account within the sudoku application.  | Low     | Open   |
-| R5.1  | Users shall be able to login to their account with a previously saved username and password.  | Low     | Open   |
-| R5.2  | Users shall be able to save sudoku puzzles to their account to can be selected upon login.  |Low| Open|
-| R6  | Users shall be able to attempt to solve the sudoku puzzle using temporary marking tools.  | Low     | Open   |
+| R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet upon request. | High | Open |
+| R2 | Users shall be able to solve the sudoku puzzle presented. | High | Open |
+| R2.1 | Users shall be able to attempt to solve the sudoku puzzle by entering in values. | High | Open |
+| R2.2 | Users shall be able to annotate the boxes of the sudoku puzzle with possible values. | High | Open |
+| R3 | Users shall have access to multiple versions of sudoku puzzles. | High | Open |
+| R4 | Users shall be able to start a new game and generate a new sudoku puzzle. | Med | Open |
+| R5 | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving. | Med | Open |
+| R6 | Users shall be able to have an account within the sudoku application. | Low | Open |
+| R6.1 | Users shall be able to login to their account with a previously saved username and password. | Low | Open |
+| R6.2 | Users shall be able to save sudoku puzzles to their account that can be selected upon login. | Low | Open |
+| R7 | Users shall be able to see how long they have spent trying to solve the sudoku puzzle. | Low | Open |
 
 <div align="center"><small><i>Table 1-1 requirements</i></small></div>
 
