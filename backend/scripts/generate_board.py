@@ -1,6 +1,6 @@
 import copy
 import random
-#import "../app/app.py"
+# import "../app/app.py"
 import argparse
 ## Class influenced by example found here https://medium.com/codex/building-a-sudoku-solver-and-generator-in-python-1-3-f29d3ede6b23
 ## How the board generation works:
@@ -24,8 +24,8 @@ class Board:
                     boardCode = boardCode[1:]
         else:
             self.boardCode = None
-    
-    def createBlankBoard(self): # resets the board to an empty state
+
+    def createBlankBoard(self):  # resets the board to an empty state
         self.board = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -39,38 +39,40 @@ class Board:
         ]
 
         return self.board
-    
-    def findSpaces(self): # finds the first empty space in the board, which is represented by a 0
+
+    def findSpaces(self):  # finds the first empty space in the board, which is represented by a 0
         for row in range(len(self.board)):
             for col in range(len(self.board[0])):
                 if self.board[row][col] == 0:
                     return (row, col)
 
         return False
-    
-    def checkSpace(self, num, space): #checks to see if a number can be fitted into a specifc space; row, col
-        if not self.board[space[0]][space[1]] == 0: # check to see if space is a number already
+
+    # checks to see if a number can be fitted into a specifc space; row, col
+    def checkSpace(self, num, space):
+        # check to see if space is a number already
+        if not self.board[space[0]][space[1]] == 0:
             return False
 
-        for col in self.board[space[0]]: # check to see if number is already in row
+        for col in self.board[space[0]]:  # check to see if number is already in row
             if col == num:
                 return False
 
-        for row in range(len(self.board)): # check to see if number is already in column
+        for row in range(len(self.board)):  # check to see if number is already in column
             if self.board[row][space[1]] == num:
                 return False
 
         boxRow = space[0] // 3
         boxCol = space[1] // 3
 
-        for i in range(3): # check to see if internal box already has number
+        for i in range(3):  # check to see if internal box already has number
             for j in range(3):
                 if self.board[i + (boxRow * 3)][j + (boxCol * 3)] == num:
                     return False
-        
+
         return True
-    
-    def boardToCode(self, input_board=None): # turn a pre-existing board into a boardCode
+
+    def boardToCode(self, input_board=None):  # turn a pre-existing board into a boardCode
         if input_board:
             inputBoardCode = ''.join([str(i) for j in input_board for i in j])
             return inputBoardCode
@@ -89,7 +91,7 @@ class Board:
         for n in range(1, 10):
             if self.checkSpace(n, (row, col)):
                 self.board[row][col] = n
-                
+
                 if self.solve():
                     return self.board
 
@@ -97,7 +99,7 @@ class Board:
 
         return False
 
-    def solveForCode(self): # solves a board and returns the code of the solved board
+    def solveForCode(self):  # solves a board and returns the code of the solved board
         return self.boardToCode(self.solve())
 
     def generateRandomCompleteBoard(self): # generates a brand new completely random board full of numbers
