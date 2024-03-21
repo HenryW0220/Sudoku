@@ -1,7 +1,6 @@
 # Requirements and Specification Document
 
-## TeamName
-### Pseudoku
+## Pseudoku
 ![Team Logo](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/mondaywednesdaylecture/T_24/cs506-team24/-/raw/main/docs/CS506_Team_Logo.png)
 
 ### Project Abstract
@@ -24,15 +23,17 @@ The goal of this project is to create a sudoku web app that mimics the process o
 | R1  | Users shall be able to solve the sudoku puzzle presented. | High      | Open   |
 | R2  | User shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet at request.| High     | Open   |
 | R3  | Users shall have access to multiple versions of sudoku puzzles. | High     | Open   |
-| R4  | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving | Med      | Open   |
+| R4  | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving. | Med      | Open   |
 | R5  | Users shall be able to have an account within the sudoku application.  | Low     | Open   |
 | R5.1  | Users shall be able to login to their account with a previously saved username and password.  | Low     | Open   |
 | R5.2  | Users shall be able to save sudoku puzzles to their account to can be selected upon login.  |Low| Open|
 | R6  | Users shall be able to attempt to solve the sudoku puzzle using temporary marking tools.  | Low     | Open   |
 
-
-
 <div align="center"><small><i>Table 1-1 requirements</i></small></div>
+
+
+### Figma Prototype
+We have created a high fidelity prototype of our Sudoku application using Figma. It can be found [here.](https://www.figma.com/file/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=0%3A1&mode=design&t=3KzTdZH16Ck1aMVe-1)
 
 
 #### Technology Stack
@@ -59,8 +60,25 @@ B <-->|SQLAlchemy| C
 
 #### Database
 Usage information:
-Storing and retrieving information from the database in this format:
+Storing and retrieving board information from the database in this format:
 ```mermaid
+flowchart RL
+subgraph Front End
+	A(Typescript: React)
+end
+	
+subgraph Back End
+	B(Python: Flask)
+end
+	
+subgraph Database
+	C[(MySQL)]
+end
+
+A <-->|"REST API"| B
+B <-->|SQLAlchemy| C
+```
+<!-- ```mermaid
 [
     boardId,
     num00,
@@ -68,12 +86,14 @@ Storing and retrieving information from the database in this format:
     num02,
     ....
 ]
-```
+``` -->
+
 
 #### System Architecture Diagram
 ![System Architecture Diagram](https://git.doit.wisc.edu/cdis/cs/courses/cs506/sp2024/team/mondaywednesdaylecture/T_24/cs506-team24/-/raw/main/docs/System_Architecture_Diagram.png)
 
 
 ### Standards & Conventions
+
 
 <!--Here you can document your coding standards and conventions. This includes decisions about naming, style guides, etc.-->
