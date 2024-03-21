@@ -2,7 +2,15 @@ import copy
 import random
 #import "../app/app.py"
 import argparse
-## Class heavily influenced by example found here https://medium.com/codex/building-a-sudoku-solver-and-generator-in-python-1-3-f29d3ede6b23
+## Class influenced by example found here https://medium.com/codex/building-a-sudoku-solver-and-generator-in-python-1-3-f29d3ede6b23
+## How the board generation works:
+## 1) create 3 randomized valid 3x3 squares and assign to the upper left square, the middle, and bottem left square (generateRandomCompleteBoard)
+## 2) Finish the board generation by iteratively assigning a random number to a spot and checking for validity, if valid move on (finishBoardGen)
+## 3) Based on difficulty remove squares checking each time if there is only 1 solution, the higher the difficulty the longer this will take
+## Usage for generation: 
+# Call = Board.generateQuestionBoardCode(difficulty) , where "Board" is board object and "difficulty" is a number 1-3 (easy, medium, hard)
+# return = [question_board, answer_board] 
+# format of question_board, answer_board = numbers [1-9] or 0 for blank spots, in the form of a string separated by spaces
 class Board:
     def __init__(self, boardCode=None):
         self.createBlankBoard()
@@ -64,19 +72,19 @@ class Board:
     
     def boardToCode(self, input_board=None): # turn a pre-existing board into a boardCode
         if input_board:
-            _boardCode = ''.join([str(i) for j in input_board for i in j])
-            return _boardCode
+            inputBoardCode = ''.join([str(i) for j in input_board for i in j])
+            return inputBoardCode
         else:
             self.boardCode = ''.join([str(i) for j in self.board for i in j])
             return self.boardCode
         
     def solve(self): # solves a board using recursion
-        _spacesAvailable = self.findSpaces()
+        spacesAvailable = self.findSpaces()
 
-        if not _spacesAvailable:
+        if not spacesAvailable:
             return True
         else:
-            row, col = _spacesAvailable
+            row, col = spacesAvailable
 
         for n in range(1, 10):
             if self.checkSpace(n, (row, col)):
@@ -92,50 +100,50 @@ class Board:
     def solveForCode(self): # solves a board and returns the code of the solved board
         return self.boardToCode(self.solve())
 
-    def __generateRandomCompleteBoard(self): # generates a brand new completely random board full of numbers
+    def generateRandomCompleteBoard(self): # generates a brand new completely random board full of numbers
         self.createBlankBoard()
 
-        _l = list(range(1, 10))
+        possibleNums = list(range(1, 10))
         for row in range(3):
             for col in range(3):
-                _num = random.choice(_l)
-                self.board[row][col] = _num
-                _l.remove(_num)
+                choiceNum = random.choice(possibleNums)
+                self.board[row][col] = choiceNum
+                possibleNums.remove(choiceNum)
 
-        _l = list(range(1, 10))
+        possibleNums = list(range(1, 10))
         for row in range(3, 6):
             for col in range(3, 6):
-                _num = random.choice(_l)
-                self.board[row][col] = _num
-                _l.remove(_num)
+                choiceNum = random.choice(possibleNums)
+                self.board[row][col] = choiceNum
+                possibleNums.remove(choiceNum)
 
-        _l = list(range(1, 10))
+        possibleNums = list(range(1, 10))
         for row in range(6, 9):
             for col in range(6, 9):
-                _num = random.choice(_l)
-                self.board[row][col] = _num
-                _l.remove(_num)
+                choiceNum = random.choice(possibleNums)
+                self.board[row][col] = choiceNum
+                possibleNums.remove(choiceNum)
 
-        return self.__generateCont()
+        return self.finishBoardGen()
         
-    def __generateCont(self): # uses recursion to finish generating a random board
+    def finishBoardGen(self): # uses recursion to finish generating a random board
         for row in range(len(self.board)):
             for col in range(len(self.board[row])):
                 if self.board[row][col] == 0:
-                    _num = random.randint(1, 9)
+                    randNum = random.randint(1, 9)
 
-                    if self.checkSpace(_num, (row, col)):
-                        self.board[row][col] = _num
+                    if self.checkSpace(randNum, (row, col)):
+                        self.board[row][col] = randNum
 
                         if self.solve():
-                            self.__generateCont()
+                            self.finishBoardGen()
                             return self.board
 
                         self.board[row][col] = 0
 
         return False
     
-    def __solveToFindNumberOfSolutions(self, row, col): # solves the board using recursion, is used within the findNumberOfSolutions method
+    def solveToFindNumberOfSolutions(self, row, col): # solves the board using recursion, is used within the findNumberOfSolutions method
         for n in range(1, 10):
             if self.checkSpace(n, (row, col)):
                 self.board[row][col] = n
@@ -147,105 +155,101 @@ class Board:
 
         return False
     
-    def __findSpacesToFindNumberOfSolutions(self, board, h): # finds the first empty space it comes across, is used within the findNumberOfSolutions method
-        _k = 1
+    def findSpacesToFindNumberOfSolutions(self, board, h): # finds the first empty space it comes across, is used within the findNumberOfSolutions method
+        k = 1
         for row in range(len(board)):
             for col in range(len(board[row])):
                 if board[row][col] == 0:
-                    if _k == h:
+                    if k == h:
                         return (row, col)
 
-                    _k += 1
+                    k += 1
 
         return False
     
     def findNumberOfSolutions(self): # finds the number of solutions to a board and returns the list of solutions
-        _z = 0
-        _list_of_solutions = []
+        z = 0
+        list_of_solutions = []
 
         for row in range(len(self.board)):
             for col in range(len(self.board[row])):
                 if self.board[row][col] == 0:
-                    _z += 1
+                    z += 1
 
-        for i in range(1, _z+1):
-            _board_copy = copy.deepcopy(self)
+        for i in range(1, z+1):
+            board_copy = copy.deepcopy(self)
 
-            _row, _col = self.__findSpacesToFindNumberOfSolutions(_board_copy.board, i)
-            _board_copy_solution = _board_copy.__solveToFindNumberOfSolutions(_row, _col)
+            row, col = self.findSpacesToFindNumberOfSolutions(board_copy.board, i)
+            board_copy_solution = board_copy.solveToFindNumberOfSolutions(row, col)
 
-            _list_of_solutions.append(self.boardToCode(input_board=_board_copy_solution))
+            list_of_solutions.append(self.boardToCode(input_board=board_copy_solution))
 
-        return list(set(_list_of_solutions))
+        return list(set(list_of_solutions))
     
     def generateQuestionBoard(self, fullBoard, difficulty): # generates a question board with a certain number of cells removed depending on the chosen difficulty
         self.board = copy.deepcopy(fullBoard)
         
-        if difficulty == 0:
-            _squares_to_remove = 36
-        elif difficulty == 1:
-            _squares_to_remove = 46
+        if difficulty == 1:
+            squares_to_remove = 27
         elif difficulty == 2:
-            _squares_to_remove = 52
+            squares_to_remove = 33
+        elif difficulty == 3:
+            squares_to_remove = 46
         else:
             return
 
-        _counter = 0
-        while _counter < 4:
-            _rRow = random.randint(0, 2)
-            _rCol = random.randint(0, 2)
-            if self.board[_rRow][_rCol] != 0:
-                self.board[_rRow][_rCol] = 0
-                _counter += 1
+        counter = 0
+        while counter < 4:
+            rRow = random.randint(0, 2)
+            rCol = random.randint(0, 2)
+            if self.board[rRow][rCol] != 0:
+                self.board[rRow][rCol] = 0
+                counter += 1
 
-        _counter = 0
-        while _counter < 4:
-            _rRow = random.randint(3, 5)
-            _rCol = random.randint(3, 5)
-            if self.board[_rRow][_rCol] != 0:
-                self.board[_rRow][_rCol] = 0
-                _counter += 1
+        counter = 0
+        while counter < 4:
+            rRow = random.randint(3, 5)
+            rCol = random.randint(3, 5)
+            if self.board[rRow][rCol] != 0:
+                self.board[rRow][rCol] = 0
+                counter += 1
 
-        _counter = 0
-        while _counter < 4:
-            _rRow = random.randint(6, 8)
-            _rCol = random.randint(6, 8)
-            if self.board[_rRow][_rCol] != 0:
-                self.board[_rRow][_rCol] = 0
-                _counter += 1
+        counter = 0
+        while counter < 4:
+            rRow = random.randint(6, 8)
+            rCol = random.randint(6, 8)
+            if self.board[rRow][rCol] != 0:
+                self.board[rRow][rCol] = 0
+                counter += 1
 
-        _squares_to_remove -= 12
-        _counter = 0
-        while _counter < _squares_to_remove:
-            _row = random.randint(0, 8)
-            _col = random.randint(0, 8)
+        squares_to_remove -= 12
+        counter = 0
+        while counter < squares_to_remove:
+            row = random.randint(0, 8)
+            col = random.randint(0, 8)
 
-            if self.board[_row][_col] != 0:
-                n = self.board[_row][_col]
-                self.board[_row][_col] = 0
+            if self.board[row][col] != 0:
+                n = self.board[row][col]
+                self.board[row][col] = 0
 
                 if len(self.findNumberOfSolutions()) != 1:
-                    self.board[_row][_col] = n
+                    self.board[row][col] = n
                     continue
 
-                _counter += 1
+                counter += 1
 
         return self.board, fullBoard
     
     def generateQuestionBoardCode(self, difficulty): # generates a new random board and its board code depending on the difficulty
-        self.board, _solution_board = self.generateQuestionBoard(self.__generateRandomCompleteBoard(), difficulty)
-        return self.boardToCode(), self.boardToCode(_solution_board)
+        # TODO add spaces to completed board
+        self.board, solution_board = self.generateQuestionBoard(self.generateRandomCompleteBoard(), difficulty)
+        return ' '.join(self.boardToCode()), ' '.join(self.boardToCode(solution_board))
     
 if __name__ == '__main__':
     # Usage example
     board = Board()
 
-    question_board = board.generateQuestionBoardCode(1) # generates a medium level sudoku
+    question_board = board.generateQuestionBoardCode(2) # generates a medium level sudoku
     print(question_board[0])
     print (question_board[1])
-
-    # boardCode = '300105000060200000008090060050000800800007040071009035000900084704006000902048300'
-    # solved_board_code = Board(boardCode).solveForCode() # solves a hard level sudoku 
     
-    # TODO plug into backend, import backend functionality 
-    # TODO plug into frontend using correct formatting
