@@ -32,14 +32,13 @@ The goal of this project is to create a sudoku web app that mimics the process o
 | R5.2 | Users shall be able to save generated sudoku puzzles to their account which can be selected upon login. | Low | Open |
 | R5.3 | Users shall be able to save their progress on a sudoku puzzle to their account which can be continued later. | Low | Open |
 | R6 | Users shall be able to see how long they have spent trying to solve the sudoku puzzle. | Low | Open |
-| R7 | Users shall have access to sudoku various in addition to standard sudoku. | Low | Open |
+| R7 | Users shall have access to sudoku variants in addition to standard sudoku. | Low | Open |
 
 <div align="center"><small><i>Table 1-1 requirements</i></small></div>
 
 
 ### Figma Prototype
 We have created a high fidelity prototype of our Sudoku application using Figma.
-
 
 The full prototype can be found [here](https://www.figma.com/file/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=0%3A1&mode=design&t=3KzTdZH16Ck1aMVe-1).
 
