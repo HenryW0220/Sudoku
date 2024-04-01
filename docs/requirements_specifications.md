@@ -20,7 +20,7 @@ The goal of this project is to create a sudoku web app that mimics the process o
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and, upon request, a completed answer sheet. | High | Open |
+| R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet (upon request). | High | Open |
 | R2 | Users shall be able to solve the sudoku puzzle presented. | High | Open |
 | R2.1 | Users shall be able to attempt to solve the sudoku puzzle by entering in values. | High | Open |
 | R2.2 | Users shall be able to annotate the boxes of the sudoku puzzle with possible values. | High | Open |
