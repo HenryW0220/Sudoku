@@ -52,5 +52,5 @@ Sprint 3:
 
 
 ## Figma Prototype
-We have created a high fidelity prototype of our Sudoku application using Figma. It can be found [here](https://www.figma.com/file/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=0%3A1&mode=design&t=3KzTdZH16Ck1aMVe-1).
+We have created a high fidelity prototype of our Sudoku application using Figma. It can be found [here](https://www.figma.com/proto/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=1-3&t=HqNWP6pkfUuQvsIN-0&scaling=scale-down&page-id=0%3A1&starting-point-node-id=1%3A3&show-proto-sidebar=1).
 
