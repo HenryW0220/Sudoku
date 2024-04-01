@@ -20,15 +20,15 @@ The goal of this project is to create a sudoku web app that mimics the process o
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet (upon request.) | High | Open |
+| R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and, upon request, a completed answer sheet. | High | Open |
 | R2 | Users shall be able to solve the sudoku puzzle presented. | High | Open |
 | R2.1 | Users shall be able to attempt to solve the sudoku puzzle by entering in values. | High | Open |
 | R2.2 | Users shall be able to annotate the boxes of the sudoku puzzle with possible values. | High | Open |
 | R2.3 | Users shall be able to see if any of their moves are invalid. | High | Open |
-| R3 | Users shall be able to start a new game and generate a new sudoku puzzle. | Med | Open |
-| R4 | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving. | Med | Open |
-| R5 | Users shall be able to have an account within the sudoku application. | Med-Low | Open |
-| R5.1 | Users shall be able to login to their account with a previously saved username and password. | Med-Low | Open |
+| R3 | Users shall be able to start a new game and generate a new sudoku puzzle. | Medium | Open |
+| R4 | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving. | Medium | Open |
+| R5 | Users shall be able to have an account within the sudoku application. | Medium-Low | Open |
+| R5.1 | Users shall be able to login to their account with a previously saved username and password. | Medium-Low | Open |
 | R5.2 | Users shall be able to save generated sudoku puzzles to their account which can be selected upon login. | Low | Open |
 | R5.3 | Users shall be able to save their progress on a sudoku puzzle to their account which can be continued later. | Low | Open |
 | R6 | Users shall be able to see how long they have spent trying to solve the sudoku puzzle. | Low | Open |
