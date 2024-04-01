@@ -43,6 +43,7 @@ def retrieve_board(board_id):
     """
     # Connect to MySQL DB
     connection, cursor = get_db_connection()
+    cursor.execute('USE TEST_DB')
 
     # Retrieve row of cursor whose id is equal to that of board_id
     cursor.execute('SELECT * FROM Board WHERE board_id = %s', (board_id,))
@@ -78,6 +79,7 @@ def store_board(board_id):
     """
     # Connect to MySQL DB
     connection, cursor = get_db_connection()
+    cursor.execute('USE TEST_DB')
     # Grab the board contents from the request body
     board_contents = request.json.get('board_contents')
     if board_contents:
