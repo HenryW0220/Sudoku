@@ -9,7 +9,7 @@ def client():
 
 def test_retrieve_board(client):
     # Test valid board retrieval
-    response = client.get('/boards/retrieve_board/1')
+    response = client.get('/boards/retrieve_board/1000')
     assert response.status_code == 200
     data = response.get_json()
     assert data[0] == 1  # Check if board ID matches
