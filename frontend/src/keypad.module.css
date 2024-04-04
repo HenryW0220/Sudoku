@@ -1,0 +1,78 @@
+.keypadContainer {
+    margin: auto; 
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #ccc; 
+    border-radius: 5px;
+    background-color: #f9f9f9; 
+  }
+  
+  .modeContainer {
+    border: 1px solid #000000; 
+    border-radius: 5px;
+    padding: 5px; 
+    margin-bottom: 20px;
+    background-color: #f9f9f9; 
+  }
+  
+  .modeLabel {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px; 
+  }
+  
+  .modeSection {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px; 
+    }
+    
+    .modeButton {
+      flex-grow: 1;
+      padding: 10px;
+      margin: 0px 5px; 
+      background-color: #CBC3E3; 
+      border: 1px solid #000000;
+      border-radius: 5px;
+      cursor: pointer; 
+      font-size: 1rem; 
+    }
+    
+    .numbersSection {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .numberButton {
+      padding: 15px; 
+      background-color: #CBC3E3; 
+      border: 1px solid #000000; 
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.25rem; 
+    }  
+  
+    .actionsSection {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .actionButton {
+      flex-grow: 1; 
+      padding: 10px;
+      margin: 0 5px; 
+      background-color: #CBC3E3; 
+      border: 1px solid #000000; 
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .modeButton:hover,
+    .numberButton:hover,
+    .actionButton:hover {
+      background-color: #673ab7;
+    }  

@@ -1,14 +1,27 @@
-import { useState } from "react";
-//maybe use instead of 
+import { useState } from "react"
+//import Lottie from "lottie-react"
+//import animationData from '../lotties/correctAnimation.json'
+
 export default function SudokuCell(props: any) {
+    const row= props.row
+    const column= props.col
+    // eslint-disable-next-line
     const [inputNumber, changeInputNumber] = useState(props.initValue)
-  
-    return <div className="outline outline-1 p-1">
-            <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-            </span>
-            <input style={{backgroundColor: "transparent", outline: 0}} value={inputNumber} onChange={(e) => changeInputNumber(e.target.value)} type="text" min="1" max="9"></input>
-            
-    </div>
+
+    const sudokuCellClicked = () => {
+        props.sudokuCellSelected(row, column)
+    }
+
+    return <div onClick={sudokuCellClicked} className= {`outline outline-1 p-1 size-16 ${props.shaded ? "bg-purple-100" : "bg-white"} flex items-center hover:bg-slate-200 transition-color duration-150
+                ${props.row===1 && props.col===1 && "rounded-tl-3xl"}
+                ${props.row===1 && props.col===9 && "rounded-tr-3xl"}
+                ${props.row===9 && props.col===1 && "rounded-bl-3xl"}
+                ${props.row===9 && props.col===9 && "rounded-br-3xl"}`}>
+                <span className="relative flex size-12">
+                    <p className={`size-16 text-center mt-4`}>{inputNumber}</p>
+                    {props.shaded &&
+                        <span className="ease-in-out animate-ping absolute rounded-sm h-8 w-8 bg-purple-100 opacity-90"></span>
+                    }
+                </span>
+        </div>
 }
