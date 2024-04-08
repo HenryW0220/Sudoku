@@ -50,7 +50,25 @@ Sprint 3:
     Product Owner - Henry Weng
 
 
-
 ## Figma Prototype
 We have created a high fidelity prototype of our Sudoku application using Figma. It can be found [here](https://www.figma.com/proto/gDVxq0N7kbBzlIZ1ySW40q/issue_21?type=design&node-id=1-3&t=HqNWP6pkfUuQvsIN-0&scaling=scale-down&page-id=0%3A1&starting-point-node-id=1%3A3&show-proto-sidebar=1).
 
+
+## Project Setup
+
+### Setup Backend and Database
+1. Login to csl machine `ssh <username>@cs506-team-24.cs.wisc.edu`
+2. Clone repository if you have not
+3. Enter backend directory `cd ~/backend`
+4. Ensure no containers are already runnning `docker kill $(docker ps -q)`
+5. Spin up backend and database containers using `docker-compose up -d --build`
+6. Wait around 1 minute for containers to spin up
+7. Can view Flask output for testing at `http://localhost:5002/` (**WARNING: FOR BACKEND TESTING ONLY**)
+8. When finished, run `docker compose down`
+### Setup Frontend
+1. Open a separate terminal (NOT ON CSL MACHINE)
+2. Tunnel into for frontend using `ssh -L 3000:localhost:3000 -L 5002:localhost:5002 <username>@cs506-team-24.cs.wisc.edu`
+3. Enter frontend directory `cd ~/frontend`
+4. Run `npm install`
+5. Run `npm start`
+6. Open up `http://localhost:3000`
