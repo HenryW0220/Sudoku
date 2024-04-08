@@ -18,21 +18,21 @@ The goal of this project is to create a sudoku web app that mimics the process o
 
 <!--This section lists the behavior that the users see. This information needs to be presented in a logical, organized fashion. It is most helpful if this section is organized in outline form: a bullet list of major topics (e.g., one for each kind of user, or each major piece of system functionality) each with some number of subtopics.-->
 
-| ID   | Description                                   | Priority | Status | Test Plan                                     |
-| ---- | --------------------------------------------- | -------- | ------ | --------------------------------------------- |
-| R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet (upon request). | High | Open | This is our test plan. |
-| R2 | Users shall be able to solve the sudoku puzzle presented. | High | Open |
-| R2.1 | Users shall be able to attempt to solve the sudoku puzzle by entering in values. | High | Open |
-| R2.2 | Users shall be able to annotate the boxes of the sudoku puzzle with possible values. | High | Open |
-| R2.3 | Users shall be able to see if any of their moves are invalid. | High | Open |
-| R3 | Users shall be able to start a new game and generate a new sudoku puzzle. | Medium | Open |
-| R4 | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving. | Medium | Open |
-| R5 | Users shall be able to have an account within the sudoku application. | Medium-Low | Open |
-| R5.1 | Users shall be able to login to their account with a previously saved username and password. | Medium-Low | Open |
-| R5.2 | Users shall be able to save generated sudoku puzzles to their account which can be selected upon login. | Low | Open |
-| R5.3 | Users shall be able to save their progress on a sudoku puzzle to their account which can be continued later. | Low | Open |
-| R6 | Users shall be able to see how long they have spent trying to solve the sudoku puzzle. | Low | Open |
-| R7 | Users shall have access to sudoku variants in addition to standard sudoku. | Low | Open |
+| ID   | Description   | Priority | Status | Test Plan  |
+| ---- | ------------- | -------- | ------ | -----------|
+| R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet (upon request). | High | Open | The user should be presented with an uncompleted version of the sudoku puzzle when they access the application. Additionally, upon user request, the completed answer sheet should be provided. |
+| R2 | Users shall be able to solve the sudoku puzzle presented. | High | Open | The user should be able to solve the sudoku puzzle in various ways. |
+| R2.1 | Users shall be able to attempt to solve the sudoku puzzle by entering in values. | High | Open | The user should be able to enter in a value into a selected box within the sudoku puzzle. |
+| R2.2 | Users shall be able to annotate the boxes of the sudoku puzzle with possible values. | High | Open | The user should be able to annotate a selected box within the sudoku puzzle with possible values. |
+| R2.3 | Users shall be able to see if any of their moves are invalid. | High | Open | The user should be informed if any of their moves are invalid while attempting to solve the sudoku puzzle. |
+| R3 | Users shall be able to start a new game and generate a new sudoku puzzle. | Medium | Open | The user should be able to press a button and start a new sudoku game. The press of this button should generate a new sudoku puzzle for the user. |
+| R4 | Users shall be able to select the degree of difficulty of the sudoku puzzle they are solving. | Medium | Open | The user should be given a choice of difficulty that they can select from when generating a new sudoku puzzle. The selection of a level of difficulty should correspond to the amount of the board that is pre-filled. |
+| R5 | Users shall be able to have an account within the sudoku application. | Medium-Low | Open | The user should have an account within the sudoku application that allows various functionalities. |
+| R5.1 | Users shall be able to login to their account with a previously saved username and password. | Medium-Low | Open | The user should be able to use a previously saved username and password to log into their sudoku account when accessing the application. |
+| R5.2 | Users shall be able to save generated sudoku puzzles to their account which can be selected upon login. | Low | Open | The user should be able to save generated sudoku puzzles to their account. Upon login, the user should be able to view the saved puzzles which can then be selected by the user. |
+| R5.3 | Users shall be able to save their progress on a sudoku puzzle to their account which can be continued later. | Low | Open | The user should be able to save their current progress on a sudoku puzzle. Only numbers that have already been filled in should be saved, annotations should not be saved. The saved puzzle should appear in the user's account for continuation later. |
+| R6 | Users shall be able to see how long they have spent trying to solve the sudoku puzzle. | Low | Open | The user should be able to see a timer on their application screen that displays the amount of time they have spent trying to solve the sudoku puzzle. |
+| R7 | Users shall have access to sudoku variants in addition to standard sudoku. | Low | Open | The user should have the option to select from standard sudoku or a sudoku variant to play upon login. |
 
 <div align="center"><small><i>Table 1-1 requirements</i></small></div>
 
