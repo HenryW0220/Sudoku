@@ -18,8 +18,8 @@ The goal of this project is to create a sudoku web app that mimics the process o
 
 <!--This section lists the behavior that the users see. This information needs to be presented in a logical, organized fashion. It is most helpful if this section is organized in outline form: a bullet list of major topics (e.g., one for each kind of user, or each major piece of system functionality) each with some number of subtopics.-->
 
-| ID   | Description                                                  | Priority | Status | Test Plan                                                    |
-| ---- | ------------------------------------------------------------ | -------- | ------ | ------------------------------------------------------------ |
+| ID   | Description                                   | Priority | Status | Test Plan                                     |
+| ---- | --------------------------------------------- | -------- | ------ | --------------------------------------------- |
 | R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet (upon request). | High | Open | This is our test plan. |
 | R2 | Users shall be able to solve the sudoku puzzle presented. | High | Open |
 | R2.1 | Users shall be able to attempt to solve the sudoku puzzle by entering in values. | High | Open |
