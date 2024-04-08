@@ -2,8 +2,8 @@ import pytest
 from app import app
 from unittest.mock import MagicMock
 
-# Define the mock_db_connection function to create a closure
-# This allows us to create different instances of mock_get_db_connection with a different fetchone_return_value to customize its behavior for different test cases
+# Define the mock_get_db_connection function to create a closure
+# This allows us to create different instances of mock_db_connection with a different fetchone_return_value to customize its behavior for different test cases
 def mock_get_db_connection(fetchone_return_value):
     def mock_db_connection():
         connection = MagicMock()
@@ -12,14 +12,13 @@ def mock_get_db_connection(fetchone_return_value):
         return connection, cursor
     return mock_db_connection
 
+# Define the mock_post_db_connection function to create a closure
 def mock_post_db_connection(fetchone_return_value):
     def mock_db_connection():
         connection = MagicMock()
         cursor = MagicMock()
         # Mocking the execution of the SQL insert query
         cursor.execute.return_value = None
-        # Assuming you want to simulate a successful insertion
-        # You can simulate the behavior of fetching the inserted data, if necessary
         cursor.fetchone.return_value = fetchone_return_value
         return connection, cursor
     return mock_db_connection
@@ -33,7 +32,7 @@ def client():
 
 # Test cases
 def test_retrieve_board_found(client, monkeypatch):
-    # Simulate a board found scenario
+    # Board found scenario
     expected_board_id = 1000
     expected_board_contents = '1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9'
     expected_response = [expected_board_id] + [int(num) for num in expected_board_contents.split()]
@@ -49,7 +48,7 @@ def test_retrieve_board_found(client, monkeypatch):
     assert response.json == expected_response
 
 def test_retrieve_board_not_found(client, monkeypatch):
-    # Simulate a board not found scenario
+    # Board not found scenario
     non_existent_board_id = 999
 
     # Mocking the database connection function
@@ -63,7 +62,7 @@ def test_retrieve_board_not_found(client, monkeypatch):
     assert response.json == {'message': 'Invalid Board ID: Board Not Found'}
 
 def test_store_board_success(client, monkeypatch):
-    # Simulate a store board scenario
+    # Store board success scenario
     board_id = 9999
     board_contents = '0 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9'
 
@@ -78,7 +77,7 @@ def test_store_board_success(client, monkeypatch):
     assert response.data == f'Sudoku Board (id: {board_id}) Stored Successfully!'.encode('utf-8')
 
 def test_store_board_unsuccess(client, monkeypatch):
-    # Simulate a store board scenario
+    # Store board unsuccess scenario
     board_id = 9999
     board_contents = ''
 
