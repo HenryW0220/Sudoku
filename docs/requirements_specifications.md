@@ -14,12 +14,12 @@ The goal of this project is to create a sudoku web app that mimics the process o
 
 <!--A brief description of the customer for this software, both in general (the population who might eventually use such a system) and specifically for this document (the customer(s) who informed this document). Every project will have a customer from the CS506 instructional staff. Requirements should not be derived simply from discussion among team members. Ideally your customer should not only talk to you about requirements but also be excited later in the semester to use the system.-->
 
-### User Requirements
+### User Requirements and Test Plan
 
 <!--This section lists the behavior that the users see. This information needs to be presented in a logical, organized fashion. It is most helpful if this section is organized in outline form: a bullet list of major topics (e.g., one for each kind of user, or each major piece of system functionality) each with some number of subtopics.-->
 
-| ID   | Description   | Priority | Status | Test Plan  |
-| ---- | ------------- | -------- | ------ | -----------|
+| ID   | Description  | Priority | Status | Test Plan   |
+| ---- | ------------ | -------- | ------ | ------------|
 | R1 | Users shall be provided with an uncompleted version of the sudoku puzzle and a completed answer sheet (upon request). | High | Open | The user should be presented with an uncompleted version of the sudoku puzzle when they access the application. Additionally, upon user request, the completed answer sheet should be provided. |
 | R2 | Users shall be able to solve the sudoku puzzle presented. | High | Open | The user should be able to solve the sudoku puzzle in various ways. |
 | R2.1 | Users shall be able to attempt to solve the sudoku puzzle by entering in values. | High | Open | The user should be able to enter in a value into a selected box within the sudoku puzzle. |
@@ -34,7 +34,7 @@ The goal of this project is to create a sudoku web app that mimics the process o
 | R6 | Users shall be able to see how long they have spent trying to solve the sudoku puzzle. | Low | Open | The user should be able to see a timer on their application screen that displays the amount of time they have spent trying to solve the sudoku puzzle. |
 | R7 | Users shall have access to sudoku variants in addition to standard sudoku. | Low | Open | The user should have the option to select from standard sudoku or a sudoku variant to play upon login. |
 
-<div align="center"><small><i>Table 1-1 requirements</i></small></div>
+<div align="center"><small><i>Table 1-1 Requirements and Test Plan</i></small></div>
 
 
 ### Figma Prototype
