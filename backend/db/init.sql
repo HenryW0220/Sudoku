@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Board (
 CREATE TABLE IF NOT EXISTS User (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(255),
-    user_password VARCHAR(255)
+    user_pwd VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS PartialBoard (
@@ -23,6 +23,6 @@ CREATE TABLE IF NOT EXISTS PartialBoard (
     FOREIGN KEY (board_id) REFERENCES Board(board_id)
 );
 
-INSERT INTO Board (board_id, board_contents, board_answer) VALUES (1005, '1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9', '1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9');
+INSERT INTO Board (board_id, board_contents, board_answer) VALUES (0, '1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9', '1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9');
 
-INSERT INTO User (user_id, user_username, user_password) VALUES (0, 'test_user', 'test_password');
+INSERT INTO User (user_id, user_name, user_pwd) VALUES (0, 'test_user', 'test_password');
