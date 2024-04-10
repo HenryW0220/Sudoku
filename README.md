@@ -23,7 +23,7 @@ Katherine Lesavich
 
 ~~Sprint 1: Feb 28-Mar 13~~
 
-Sprint 2: Mar 13-Apr 10
+~~Sprint 2: Mar 13-Apr 10~~
 
 Sprint 3: Apr 10-Apr 29
 
