@@ -22,10 +22,6 @@ build-backend:
   paths:
     - backend/venv
   expire_in: 1 week
-  # rules:
-  #   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
-
-
 
 test-backend:
   stage: test
