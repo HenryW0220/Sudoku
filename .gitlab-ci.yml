@@ -2,6 +2,12 @@ stages:
   - build
   - test
 
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - backend/venv/
+    - backend/__pycache__/
+
 build-backend:
   stage: build
   image: python:3.11
@@ -12,6 +18,14 @@ build-backend:
     - source venv/bin/activate
     - cd backend
     - pip install -r requirements.txt
+  artifacts:
+  paths:
+    - backend/venv
+  expire_in: 1 week
+  # rules:
+  #   - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+
+
 
 test-backend:
   stage: test
@@ -22,3 +36,9 @@ test-backend:
     - source venv/bin/activate
     - pip install -r requirements.txt
     - pytest
+  artifacts:
+    paths:
+      - backend/venv
+    expire_in: 1 week
+
+
