@@ -19,9 +19,9 @@ build-backend:
     - cd backend
     - pip install -r requirements.txt
   artifacts:
-  paths:
-    - backend/venv
-  expire_in: 1 week
+    paths:
+      - backend/venv
+    expire_in: 1 week
 
 test-backend:
   stage: test
