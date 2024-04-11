@@ -18,6 +18,7 @@ test-backend:
   image: python:3.11
   script:
     - cd backend
+    - python3 -m venv backend/venv
     - source venv/bin/activate
     - pip install pytest
     - pytest
