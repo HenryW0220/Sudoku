@@ -1,0 +1,19 @@
+stages:
+  - build
+  - test
+
+build-backend:
+  stage: build
+  image: python3.11
+  script:
+    - apt get update
+    - cd backend
+
+test-backend:
+  stage: test
+  image: python3.11
+  script:
+    - cd backend
+    - pip install pytest
+    - pytest
+ 
