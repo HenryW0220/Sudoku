@@ -16,4 +16,5 @@ test-backend:
   image: python:3.11
   script:
     - cd backend
+    - pip install pytest
     - pytest
