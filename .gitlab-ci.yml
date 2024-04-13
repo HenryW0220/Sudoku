@@ -19,7 +19,7 @@ build-backend:
     - pip install -r requirements.txt
   artifacts:
     paths:
-      - backend/venv
+      - /venv
     expire_in: 1 week
 
 test-backend:
@@ -33,7 +33,7 @@ test-backend:
     - pytest
   artifacts:
     paths:
-      - backend/venv
+      - /venv
     expire_in: 1 week
 
 
