@@ -5,7 +5,7 @@ stages:
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - backend/venv/
+    - venv/
 
 build-backend:
   stage: build
