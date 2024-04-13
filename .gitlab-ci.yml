@@ -6,7 +6,6 @@ cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - backend/venv/
-    - backend/__pycache__/
 
 build-backend:
   stage: build
