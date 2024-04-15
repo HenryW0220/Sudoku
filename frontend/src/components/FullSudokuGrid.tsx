@@ -17,7 +17,7 @@ export default function FullSudokuGrid() {
   const [tempBoard, setTempBoard] = useState<SudokuElement[]>([]) // temp board for hiding the answer again
   const [selectingListener, setSelectingListener]= useState(false)
   const [showingAnswer, setShowingAnswer] = useState(false)
-  const [boardId, setBoardId] = useState<number>(1002); // defaulted to 1002 for now
+  const [boardId, setBoardId] = useState<number>(1); // defaulted to 1 for now
 
 
   useEffect(() => {
