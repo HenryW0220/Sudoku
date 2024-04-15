@@ -17,23 +17,25 @@ export default function FullSudokuGrid() {
   const [tempBoard, setTempBoard] = useState<SudokuElement[]>([]) // temp board for hiding the answer again
   const [selectingListener, setSelectingListener]= useState(false)
   const [showingAnswer, setShowingAnswer] = useState(false)
-  const [boardId, setBoardId] = useState<number>(1); // defaulted to 1 for now
+  const [boardId, setBoardId] = useState<number>(3); // defaulted to 1 for now
 
 
   useEffect(() => {
     fetch(`http://localhost:5002/boards/retrieve_board/${boardId}`)//1002 boardID is mock for testing
       .then(res => res.json())
       .then(json => {
-        // let sudokuElementList: SudokuElement[] = json.slice(1).map((element: number, i) => {
+        // let sudokuElementList: SudokuElement[] = json.slice(0).map((element: number, i) => {
 
         //   const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
         //   const ROW: number= Math.floor(((i/9)+1))
     
-        //   let sudokuCellInfo: SudokuElement = {value: element, ans: ansList[i], shaded:false, selected:false, row: ROW, col: COL};
+        //   let sudokuCellInfo: SudokuElement = {value: element, ans: json.slice(1)[i], shaded:false, selected:false, row: ROW, col: COL};
         //   return sudokuCellInfo
         // })
         // setSudokuBoard( sudokuElementList )
-        console.log(json);
+        console.log(json)
+        console.log(json.slice(0));
+        console.log(json.slice(1));
       })
     .catch(
       error => {
