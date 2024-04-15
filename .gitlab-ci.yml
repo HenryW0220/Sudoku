@@ -1,0 +1,41 @@
+stages:
+  - build
+  - test
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - venv/
+
+build-backend:
+  stage: build
+  image: python:3.11
+  script:
+    - apt-get update
+    - apt-get install -y python3-pip
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - cd backend
+    - pip install -r requirements.txt
+  artifacts:
+    paths:
+      - /venv
+    expire_in: 1 week
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+
+test-backend:
+  stage: test
+  image: python:3.11
+  script:
+    - cd backend
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+    - pytest
+  artifacts:
+    paths:
+      - /venv
+    expire_in: 1 week
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"

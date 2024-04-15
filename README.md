@@ -60,11 +60,13 @@ We have created a high fidelity prototype of our Sudoku application using Figma.
 1. Login to csl machine `ssh <username>@cs506-team-24.cs.wisc.edu`
 2. Clone repository if you have not
 3. Enter backend directory `cd ~/backend`
-4. Ensure no containers are already runnning `docker kill $(docker ps -q)`
-5. Spin up backend and database containers using `docker-compose up -d --build`
-6. Wait around 1 minute for containers to spin up
-7. Can view Flask output for testing at `http://localhost:5002/` (**WARNING: FOR BACKEND TESTING ONLY**)
-8. When finished, run `docker compose down`
+4. `python3 -m venv venv`
+5. `pip install -r requirements.txt`
+6. Ensure no containers are already runnning `docker kill $(docker ps -q)`
+7. Spin up backend and database containers using `docker-compose up -d --build`
+8. Wait around 1 minute for containers to spin up
+9. Can view Flask output for testing at `http://localhost:5002/` (**WARNING: FOR BACKEND TESTING ONLY**)
+10. When finished with all development, run `docker compose down`
 ### Setup Frontend
 1. Open a separate terminal (NOT ON CSL MACHINE)
 2. Tunnel into for frontend using `ssh -L 3000:localhost:3000 -L 5002:localhost:5002 <username>@cs506-team-24.cs.wisc.edu`
