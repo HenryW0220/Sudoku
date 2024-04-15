@@ -5,6 +5,7 @@ import styles from '../keypad.module.css';
 //explicitly telling the machine what our sudokuBoard array elements are
 interface SudokuElement {
   value: number;
+  ans : number;
   shaded: boolean;
   selected: boolean;
   row: number;
@@ -12,9 +13,10 @@ interface SudokuElement {
 }
 export default function FullSudokuGrid() {
   //contain api sudoku board values
-  const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([])
-
+  const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([]) // currently displayed board
+  const [tempBoard, setTempBoard] = useState<SudokuElement[]>([]) // temp board for hiding the answer again
   const [selectingListener, setSelectingListener]= useState(false)
+  const [showingAnswer, setShowingAnswer] = useState(false)
 
 /**
   useEffect(() => {
@@ -35,13 +37,14 @@ export default function FullSudokuGrid() {
 
  //TODO: test version
   useEffect(() => {
-    let json: number[]= [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9] 
+    let json: number[]= [4,0,7,2,1,6,0,9,3,0,3,0,4,5,0,6,7,0,0,0,9,3,0,7,4,0,0,1,0,8,0,6,4,0,3,0,9,7,6,0,0,0,0,2,4,3,0,5,0,7,0,9,6,1,8,9,2,0,0,3,0,5,0,5,0,3,7,0,8,0,4,0,7,6,0,5,0,1,3,8,0] 
+    let ansList: number[]=[4,8,7,2,1,6,5,9,3,2,3,1,4,5,9,6,7,8,6,5,9,3,8,7,4,1,2,1,2,8,9,6,4,7,3,5,9,7,6,1,3,5,8,2,4,3,4,5,8,7,2,9,6,1,8,9,2,6,4,3,1,5,7,5,1,3,7,9,8,2,4,6,7,6,4,5,2,1,3,8,9]
     let sudokuElementList: SudokuElement[] = json.map((element: number, i) => {
 
       const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
       const ROW: number= Math.floor(((i/9)+1))
 
-      let sudokuCellInfo: SudokuElement = {value: element , shaded:false, selected:false, row: ROW, col: COL};
+      let sudokuCellInfo: SudokuElement = {value: element, ans: ansList[i], shaded:false, selected:false, row: ROW, col: COL};
       return sudokuCellInfo
     })
     setSudokuBoard( sudokuElementList )  
@@ -68,7 +71,7 @@ const sudokuCellSelected= (row:number, col:number) => {
 
   let newSudokuBoard: SudokuElement[]= [...sudokuBoard]
 
-  newSudokuBoard[(row-1)*9 + (col)].selected= true
+  newSudokuBoard[(row-1)*9 + (col)-1].selected= true
   setSelectingListener(true)
 
 
@@ -95,7 +98,7 @@ const sudokuCellSelected= (row:number, col:number) => {
   setSudokuBoard(newSudokuBoard)
 }
 
-
+//resets shading, fills in value of selected cell(not done yet)
 const fillSudokuCell= () => {
   setSelectingListener(false)
   let newSudokuBoard: SudokuElement[]= [...sudokuBoard]
@@ -107,6 +110,26 @@ const fillSudokuCell= () => {
   setSudokuBoard(sudokuBoard)
 }
 
+const ansHandler = () => {
+
+  const updatedSudokuElementList = sudokuBoard.map((element) => {
+    // If the value is different from the ans, set shaded to true and correct value
+    if (element.value !== element.ans) {
+      return { ...element, shaded: true , value : element.ans};
+    }
+    return element;
+  });
+  if(showingAnswer){
+    setSudokuBoard(tempBoard);
+    setShowingAnswer(false);
+  }
+  else {
+    setTempBoard(sudokuBoard); // saves current board
+    setSudokuBoard(updatedSudokuElementList); // shows ans
+    setShowingAnswer(true);
+  }
+  
+}
 
 
   return <div className={"grid grid-cols-3 items-center"}>
@@ -244,6 +267,7 @@ const fillSudokuCell= () => {
             <div className={styles.actionsSection}>
               <button className={styles.actionButton}>UNDO</button>
               <button className={styles.actionButton}>ERASE</button>
+              <button className={styles.actionButton} onClick={ansHandler}>ANSWER</button>
             </div>
           </div>
     </div>

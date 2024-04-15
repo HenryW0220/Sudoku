@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 //import Lottie from "lottie-react"
 //import animationData from '../lotties/correctAnimation.json'
 
@@ -6,11 +6,16 @@ export default function SudokuCell(props: any) {
     const row= props.row
     const column= props.col
     // eslint-disable-next-line
-    const [inputNumber, changeInputNumber] = useState(props.initValue)
-
+    const [inputNumber, changeInputNumber] = useState(0)
     const sudokuCellClicked = () => {
         props.sudokuCellSelected(row, column)
     }
+
+    useEffect(() => {
+        changeInputNumber(props.initValue)
+        console.log(props.initValue);
+
+    },[props])
 
     return <div onClick={sudokuCellClicked} className= {`outline outline-1 p-1 size-16 ${props.shaded ? "bg-purple-100" : "bg-white"} flex items-center hover:bg-slate-200 transition-color duration-150
                 ${props.row===1 && props.col===1 && "rounded-tl-3xl"}
