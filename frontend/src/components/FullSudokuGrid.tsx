@@ -17,15 +17,23 @@ export default function FullSudokuGrid() {
   const [tempBoard, setTempBoard] = useState<SudokuElement[]>([]) // temp board for hiding the answer again
   const [selectingListener, setSelectingListener]= useState(false)
   const [showingAnswer, setShowingAnswer] = useState(false)
+  const [boardId, setBoardId] = useState<number>(1002); // defaulted to 1002 for now
 
-/**
+
   useEffect(() => {
-    fetch('http://localhost:5002/boards/retrieve_board/1002')//1002 boardID is mock for testing
-      .then(res => res.json()).then(json => {
-        let sudokuElementList: number[] = json.slice(1).map((element: number) => {
-          return element
-        })
-        setSudokuBoard( sudokuElementList )  
+    fetch(`http://localhost:5002/boards/retrieve_board/${boardId}`)//1002 boardID is mock for testing
+      .then(res => res.json())
+      .then(json => {
+        // let sudokuElementList: SudokuElement[] = json.slice(1).map((element: number, i) => {
+
+        //   const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
+        //   const ROW: number= Math.floor(((i/9)+1))
+    
+        //   let sudokuCellInfo: SudokuElement = {value: element, ans: ansList[i], shaded:false, selected:false, row: ROW, col: COL};
+        //   return sudokuCellInfo
+        // })
+        // setSudokuBoard( sudokuElementList )
+        console.log(json);
       })
     .catch(
       error => {
@@ -33,23 +41,23 @@ export default function FullSudokuGrid() {
       } )
     // eslint-disable-next-line
   }, []);
-  */
+
 
  //TODO: test version
-  useEffect(() => {
-    let json: number[]= [4,0,7,2,1,6,0,9,3,0,3,0,4,5,0,6,7,0,0,0,9,3,0,7,4,0,0,1,0,8,0,6,4,0,3,0,9,7,6,0,0,0,0,2,4,3,0,5,0,7,0,9,6,1,8,9,2,0,0,3,0,5,0,5,0,3,7,0,8,0,4,0,7,6,0,5,0,1,3,8,0] 
-    let ansList: number[]=[4,8,7,2,1,6,5,9,3,2,3,1,4,5,9,6,7,8,6,5,9,3,8,7,4,1,2,1,2,8,9,6,4,7,3,5,9,7,6,1,3,5,8,2,4,3,4,5,8,7,2,9,6,1,8,9,2,6,4,3,1,5,7,5,1,3,7,9,8,2,4,6,7,6,4,5,2,1,3,8,9]
-    let sudokuElementList: SudokuElement[] = json.map((element: number, i) => {
+  // useEffect(() => {
+  //   let json: number[]= [4,0,7,2,1,6,0,9,3,0,3,0,4,5,0,6,7,0,0,0,9,3,0,7,4,0,0,1,0,8,0,6,4,0,3,0,9,7,6,0,0,0,0,2,4,3,0,5,0,7,0,9,6,1,8,9,2,0,0,3,0,5,0,5,0,3,7,0,8,0,4,0,7,6,0,5,0,1,3,8,0] 
+  //   let ansList: number[]=[4,8,7,2,1,6,5,9,3,2,3,1,4,5,9,6,7,8,6,5,9,3,8,7,4,1,2,1,2,8,9,6,4,7,3,5,9,7,6,1,3,5,8,2,4,3,4,5,8,7,2,9,6,1,8,9,2,6,4,3,1,5,7,5,1,3,7,9,8,2,4,6,7,6,4,5,2,1,3,8,9]
+  //   let sudokuElementList: SudokuElement[] = json.map((element: number, i) => {
 
-      const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
-      const ROW: number= Math.floor(((i/9)+1))
+  //     const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
+  //     const ROW: number= Math.floor(((i/9)+1))
 
-      let sudokuCellInfo: SudokuElement = {value: element, ans: ansList[i], shaded:false, selected:false, row: ROW, col: COL};
-      return sudokuCellInfo
-    })
-    setSudokuBoard( sudokuElementList )  
-    // eslint-disable-next-line
-  }, []);
+  //     let sudokuCellInfo: SudokuElement = {value: element, ans: ansList[i], shaded:false, selected:false, row: ROW, col: COL};
+  //     return sudokuCellInfo
+  //   })
+  //   setSudokuBoard( sudokuElementList )  
+  //   // eslint-disable-next-line
+  // }, []);
 
 
   //helper method to set up all sudoku board sectors
