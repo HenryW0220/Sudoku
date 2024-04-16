@@ -81,17 +81,18 @@ def retrieve_board(board_id):
     print(result)
     if result:
         # Get board contents from the query result
-        board_contents = result[1]
-        # Convert the board contents to a list of integers
-        board_contents = [int(num) for num in board_contents.split()]
-        # Get board answer from the query result
-        board_answer = result[2]
-        # Convert the board answer to a list of integers
-        board_answer = [int(num) for num in board_answer.split()]
-        # Parse result into list with id followed by contents
-        sudoku_board = [board_id] + board_contents + board_answer
+        board_id, board_contents, board_answer = result
 
-        response = jsonify(sudoku_board)
+        board_contents = [int(num)
+                                  for num in board_contents.split()]
+        board_answer = [int(num) for num in board_answer.split()]
+
+        response_data = {
+            'board_id': board_id,
+            'board_contents': board_contents,
+            'board_answer': board_answer
+        }
+        response = jsonify(response_data)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
     else:
