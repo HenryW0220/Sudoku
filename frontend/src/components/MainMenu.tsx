@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router';
+import { Link } from "react-router-dom";
+
 
 export default function MainMenu() {
 
@@ -9,7 +10,6 @@ export default function MainMenu() {
     [1006, [4, 5, 6], [4, 5, 6]],
     [1007, [8, 9, 0], [8, 9, 0]]
   ]);
-  // const navigate = useNavigate()
 
   useEffect(() => {
     fetch('http://localhost:5002/boards/retrieve_all_boards')
@@ -19,17 +19,15 @@ export default function MainMenu() {
     })
   }, []);
 
-  // const handleClick = () => {
-  //   navigate(`http://localhost:5002/boards/retrieve_board/1002`)
-  // }
-
   return <>
     <h1>Welcome!</h1>
     <h1>Select a Game Board:</h1>
-    <div style={{ display: "flex", flexDirection: "row" }}>
+    <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
         {
           testBoards.map(board => ( 
-            <button >{board[0]}</button> )
+            // <Link to={`/fullsudokugrid/${board[0]}`}>
+              <button >{board[0]}</button> )
+            // { </Link>) }
           )
         }
     </div>

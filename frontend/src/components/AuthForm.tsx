@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Define the AuthForm component
 export function AuthForm({ onLogin }: any) {
@@ -8,6 +9,8 @@ export function AuthForm({ onLogin }: any) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [apiError, setApiError] = useState("");
+
+  // const navigate = useNavigate();
 
   // Define a function to toggle the form type
   const toggleType = () => {
@@ -41,6 +44,7 @@ export function AuthForm({ onLogin }: any) {
         localStorage.setItem("token", data.token);
         onLogin(data);
       }
+      // navigate('/mainmenu')
     } catch (error: any) {
       // If there is an error, log the error and set the error message
       console.error("Error:", error);
@@ -64,6 +68,7 @@ export function AuthForm({ onLogin }: any) {
       // If the response is ok, set the form type to login
       alert("Registration successful! Please log in.");
       setType("login");
+      // navigate('/mainmenu')
     } catch (error: any) {
       // If there is an error, log the error and set the error message
       console.error("Error:", error);
