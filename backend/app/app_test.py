@@ -1,6 +1,7 @@
 import pytest
 from app import app
 from unittest.mock import MagicMock
+from flask import jsonify
 
 # Define the mock_get_db_connection function to create a closure
 # This allows us to create different instances of mock_db_connection with a different fetchone_return_value to customize its behavior for different test cases
@@ -36,10 +37,15 @@ def test_retrieve_board_found(client, monkeypatch):
     expected_board_id = 0
     expected_board_contents = '1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9'
     expected_board_answer = '1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9'
-    expected_response = [expected_board_id] + [int(num) for num in expected_board_contents.split()] + [int(num) for num in expected_board_answer.split()]
+    
+    expected_response = {
+        'board_id': expected_board_id,
+        'board_contents': [int(num) for num in expected_board_contents.split()],
+        'board_answer': [int(num) for num in expected_board_answer.split()]
+    }
 
     # Mocking the database connection function
-    monkeypatch.setattr('app.get_db_connection', mock_get_db_connection((str(expected_board_id), expected_board_contents, expected_board_answer)))
+    monkeypatch.setattr('app.get_db_connection', mock_get_db_connection(((expected_board_id), expected_board_contents, expected_board_answer)))
 
     # Make a request to the endpoint
     response = client.get(f'/boards/retrieve_board/{expected_board_id}')

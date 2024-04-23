@@ -251,7 +251,13 @@ if __name__ == '__main__':
     # Usage example
     board = Board()
 
-    question_board = board.generateQuestionBoardCode(2) # generates a medium level sudoku
-    print(question_board[0])
-    print (question_board[1])
+    question_board = board.generateQuestionBoardCode(1)
+    
+    for i in range(5):
+        print(board.generateQuestionBoardCode(1), "\n")
+        print(board.generateQuestionBoardCode(2), "\n")
+        print(board.generateQuestionBoardCode(3), "\n")
+
+    
+
     
