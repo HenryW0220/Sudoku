@@ -5,7 +5,9 @@ USE TEST_DB;
 CREATE TABLE IF NOT EXISTS Board (
     board_id INT AUTO_INCREMENT PRIMARY KEY,
     board_contents VARCHAR(255),
-    board_answer VARCHAR(255)
+    board_answer VARCHAR(255),
+    user_id INT
+    -- FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS User (

@@ -2,9 +2,14 @@ from typing import List, Dict
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 import mysql.connector
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
+
 CORS(app)
+app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this!
+jwt = JWTManager(app)
 
 
 def get_db_connection():
@@ -291,6 +296,101 @@ def store_partial_board(user_id, board_id):
     else:
         return jsonify({'message': 'Partial Board Contents Not Provided: Bad Request'}), 400
 
+
+@app.route('/login', methods=['POST'])
+def login():
+    """
+    Log in a user by providing a username and password.
+
+    Parameters:
+        username (str): The username of the user.
+        password (str): The password of the user.
+
+    Returns:
+        A JSON response containing a success message and a JWT token if the login is successful,
+        or an error message if the user is not found or the password is incorrect.
+    """
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    cnx, cursor = get_db_connection()
+    cursor = cnx.cursor(dictionary=True)
+
+    # Check if the user exists in the database
+    query = "SELECT * FROM User WHERE user_name = %s"
+    cursor.execute(query, (username,))
+    user = cursor.fetchone()
+
+    if user is not None:
+        if check_password_hash(user['user_pwd'], password):
+            # Use the create_jwt function to create a token
+            token = create_access_token(identity=username)
+            return jsonify({"message": "Login successful", "token": token, "username":username}), 200
+        else:
+            return jsonify({"message": "Wrong password"}), 401
+
+    return jsonify({"message": "User not found"}), 404
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    """
+    Register a new user in the system.
+
+    Parameters:
+        username (str): The username of the user.
+        password (str): The password of the user.
+
+    Returns:
+        A JSON response containing a success message if the user is registered successfully, or an error message if the username is already taken.
+    """
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    cnx, cursor = get_db_connection()
+
+    # Check if the user_name has already been registered
+    query = "SELECT * FROM User WHERE user_name = %s"
+    cursor.execute(query, (username,))
+    if cursor.fetchone() is not None:
+        return jsonify({"message": "Username already exists"}), 400
+
+    # Hash the password
+    hashed_password = generate_password_hash(password)
+
+    # Insert the new user into the database
+    query = "INSERT INTO User (user_name, user_pwd) VALUES (%s, %s)"
+    cursor.execute(query, (username, hashed_password))
+    cnx.commit()
+
+    return jsonify({"message": "User registered successfully"}), 201
+
+@app.route('/me', methods=['GET'])
+@jwt_required()
+def me():
+    """
+    Get the information of the currently logged-in user.
+
+    Returns:
+        A JSON response containing the user's information if found, or an error message if not found.
+    """
+    # Use the get_jwt_identity function to get the identity
+    username = get_jwt_identity()
+
+    # Get the user's information from the database
+    cnx, cursor = get_db_connection()
+    cursor = cnx.cursor(dictionary=True)
+    query = "SELECT * FROM User WHERE user_name = %s"
+    cursor.execute(query, (username,))
+    user = cursor.fetchone()
+
+    if user is not None:
+        # Return the user's information
+        return jsonify({"message": "User found", "username": user['user_name']}), 200
+    else:
+        return jsonify({"message": "User not found"}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5002, debug=True)
