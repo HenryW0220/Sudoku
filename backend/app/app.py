@@ -37,13 +37,13 @@ def get_db_connection():
 """
 
 
-@app.get('/boards/retrieve_all_boards')
-def retrieve_all_boards():
+@app.get('/boards/retrieve_all_board_ids')
+def retrieve_all_board_ids():
     """
-    This function handles the GET request to retrieve all boards from the database.
+    This function handles the GET request to retrieve all board ids from the database.
 
     Returns:
-    JSON: A JSON response containing all boards in the database.
+    JSON: A JSON response containing all board ids in the database.
     """
     # Connect to MySQL DB
     connection, cursor = get_db_connection()
@@ -53,8 +53,7 @@ def retrieve_all_boards():
     connection.close()
 
     # Parse results into list of lists with id followed by contents
-    boards_list = [(board[0], [int(num) for num in board[1].split()], [
-                    int(num) for num in board[2].split()]) for board in boards]
+    boards_list = [board[0] for board in boards]
 
     response = jsonify(boards_list)
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -86,21 +85,46 @@ def retrieve_board(board_id):
     print(result)
     if result:
         # Get board contents from the query result
-        board_contents = result[1]
-        # Convert the board contents to a list of integers
-        board_contents = [int(num) for num in board_contents.split()]
-        # Get board answer from the query result
-        board_answer = result[2]
-        # Convert the board answer to a list of integers
-        board_answer = [int(num) for num in board_answer.split()]
-        # Parse result into list with id followed by contents
-        sudoku_board = [board_id] + board_contents + board_answer
+        board_id, board_contents, board_answer = result
 
-        response = jsonify(sudoku_board)
+        board_contents = [int(num)
+                          for num in board_contents.split()]
+        board_answer = [int(num) for num in board_answer.split()]
+
+        response_data = {
+            'board_id': board_id,
+            'board_contents': board_contents,
+            'board_answer': board_answer
+        }
+        response = jsonify(response_data)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
     else:
         return jsonify({'message': 'Invalid Board ID: Board Not Found'}), 404
+
+
+@app.get('/users/<int:user_id>/partial_boards/retrieve_all_partial_board_ids')
+def retrieve_all_partial_board_ids(user_id):
+    """
+    This function handles the GET request to retrieve all partial board ids from the database.
+
+    Returns:
+    JSON: A JSON response containing all partial board ids in the database.
+    """
+    # Connect to MySQL DB
+    connection, cursor = get_db_connection()
+    cursor.execute('USE TEST_DB')
+    cursor.execute('SELECT * FROM PartialBoard')
+    boards = cursor.fetchall()
+    connection.close()
+
+    # Format results into list of dictionaries
+    boards_list = [{'user_id': board[0], 'board_id': board[1]}
+                   for board in boards]
+
+    response = jsonify(boards_list)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @app.get('/users/<int:user_id>/partial_boards/retrieve_partial_board/<int:board_id>')
