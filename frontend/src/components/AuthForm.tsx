@@ -10,7 +10,7 @@ export function AuthForm({ onLogin }: any) {
   const [password, setPassword] = useState("");
   const [apiError, setApiError] = useState("");
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // Define a function to toggle the form type
   const toggleType = () => {
@@ -44,7 +44,7 @@ export function AuthForm({ onLogin }: any) {
         localStorage.setItem("token", data.token);
         onLogin(data);
       }
-      // navigate('/mainmenu')
+      navigate('/mainmenu')
     } catch (error: any) {
       // If there is an error, log the error and set the error message
       console.error("Error:", error);
@@ -68,7 +68,7 @@ export function AuthForm({ onLogin }: any) {
       // If the response is ok, set the form type to login
       alert("Registration successful! Please log in.");
       setType("login");
-      // navigate('/mainmenu')
+      navigate('/mainmenu')
     } catch (error: any) {
       // If there is an error, log the error and set the error message
       console.error("Error:", error);

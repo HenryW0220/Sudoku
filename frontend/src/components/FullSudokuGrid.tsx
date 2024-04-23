@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SudokuCell from "./SudokuCell";
 import styles from '../keypad.module.css'; 
+import { useNavigate, useParams } from "react-router-dom";
 
 //explicitly telling the machine what our sudokuBoard array elements are
 interface SudokuElement {
@@ -15,6 +16,9 @@ export default function FullSudokuGrid() {
   const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([])
 
   const [selectingListener, setSelectingListener]= useState(false)
+
+  const { boardId } = useParams<{ boardId: string }>();
+  const navigate = useNavigate();
 
 /**
   useEffect(() => {
@@ -107,7 +111,9 @@ const fillSudokuCell= () => {
   setSudokuBoard(sudokuBoard)
 }
 
-
+const handleBackClick = () => {
+  navigate('/mainmenu')
+}
 
   return <div className={"grid grid-cols-3 items-center"}>
     <div className="grid grid-cols-3 col-span-2 outline outline-4 m-8 rounded-3xl">
@@ -245,6 +251,9 @@ const fillSudokuCell= () => {
               <button className={styles.actionButton}>UNDO</button>
               <button className={styles.actionButton}>ERASE</button>
             </div>
+          </div>
+          <div className={styles.mainMenuButton}>
+            <button onClick={handleBackClick}>Back to Main Menu</button>
           </div>
     </div>
   </div>

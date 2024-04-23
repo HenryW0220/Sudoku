@@ -92,3 +92,22 @@
   cursor: pointer; 
   font-size: 1.5rem; 
 }
+  .mainMenuButton { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 20px 20px;
+    background-color: #CBC3E3; 
+    border: 1px solid #000000;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .boardButton:hover,
+  .mainMenuButton:hover {
+    background-color: #673ab7;
+    transition: 500ms;
+  }
