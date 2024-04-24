@@ -7,17 +7,35 @@ export default function SudokuCell(props: any) {
     const column= props.col
     // eslint-disable-next-line
     const [inputNumber, changeInputNumber] = useState(0)
+    const [color, setColor] = useState("");
     const sudokuCellClicked = () => {
         props.sudokuCellSelected(row, column)
     }
 
-    useEffect(() => {
-        changeInputNumber(props.initValue);
-        console.log(props.initValue);
+    const updateColor = () => {
+        
+    }
 
+    useEffect(() => {
+        // updates number
+        changeInputNumber(props.initValue);
+        // updates color
+        if (props.showingAnswer == true){
+            if (props.provided == true){
+                setColor("bg-white");
+            }
+            else {
+                setColor(props.correct ? "bg-green-100" : "bg-red-100" );
+            }
+        }
+        else{
+            setColor(props.shaded ? "bg-purple-100" : "bg-white");
+
+        }
     },[props])
+
     // if provided leave white, if wrong red if right green (make it aesthetic = lighter)
-    return <div onClick={sudokuCellClicked} className= {`outline outline-1 p-1 size-16 ${props.shaded ? "bg-purple-100" : "bg-white"} flex items-center hover:bg-slate-200 transition-color duration-150
+    return <div onClick={sudokuCellClicked} className= {`outline outline-1 p-1 size-16 ${color} flex items-center hover:bg-slate-200 transition-color duration-150
                 ${props.row===1 && props.col===1 && "rounded-tl-3xl"}
                 ${props.row===1 && props.col===9 && "rounded-tr-3xl"}
                 ${props.row===9 && props.col===1 && "rounded-bl-3xl"}

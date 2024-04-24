@@ -6,6 +6,7 @@ import styles from '../keypad.module.css';
 interface SudokuElement {
   value: number;
   ans : number;
+  correct : boolean;
   provided: boolean;
   shaded: boolean;
   selected: boolean;
@@ -21,29 +22,34 @@ export default function FullSudokuGrid() {
   const [boardId, setBoardId] = useState<number>(3); // defaulted to 1 for now
 
 
-  useEffect(() => {
-    fetch(`http://localhost:5002/boards/retrieve_board/${boardId}`)//1002 boardID is mock for testing
-      .then(res => res.json())
-      .then(json => {
-        // let sudokuElementList: SudokuElement[] = json.slice(0).map((element: number, i) => {
+  // useEffect(() => {
+  //   fetch(`http://localhost:5002/boards/retrieve_board/${boardId}`)//1002 boardID is mock for testing
+  //     .then(res => res.json())
+  //     .then(json => {
+  //       json.board_id;
+  //       json.board_contents;
+  //       json.board_answer;
 
-        //   const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
-        //   const ROW: number= Math.floor(((i/9)+1))
+  //       //(userid,boardid, partialboardcontents, boardanswer) for partial
+  //       // let sudokuElementList: SudokuElement[] = json.slice(0).map((element: number, i) => {
+
+  //       //   const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
+  //       //   const ROW: number= Math.floor(((i/9)+1))
     
-        //   let sudokuCellInfo: SudokuElement = {value: element, ans: json.slice(1)[i], shaded:false, selected:false, row: ROW, col: COL};
-        //   return sudokuCellInfo
-        // })
-        // setSudokuBoard( sudokuElementList )
-        console.log(json)
-        console.log(json.slice(0));
-        console.log(json.slice(1));
-      })
-    .catch(
-      error => {
-        console.error('Fetch Error:', error)
-      } )
-    // eslint-disable-next-line
-  }, []);
+  //       //   let sudokuCellInfo: SudokuElement = {value: element, ans: json.slice(1)[i], shaded:false, selected:false, row: ROW, col: COL};
+  //       //   return sudokuCellInfo
+  //       // })
+  //       // setSudokuBoard( sudokuElementList )
+  //       console.log(json)
+  //       console.log(json.slice(0));
+  //       console.log(json.slice(1));
+  //     })
+  //   .catch(
+  //     error => {
+  //       console.error('Fetch Error:', error)
+  //     } )
+  //   // eslint-disable-next-line
+  // }, []);
 
 
  //TODO: test version
@@ -56,8 +62,9 @@ export default function FullSudokuGrid() {
       const ROW: number= Math.floor(((i/9)+1))
 
       const provided = element != 0 ? true : false;
+      const correct = provided ? true : (element == ansList[i] ? true : false);
 
-      let sudokuCellInfo: SudokuElement = {value: element, ans: ansList[i], shaded:false, selected:false, row: ROW, col: COL, provided: provided};
+      let sudokuCellInfo: SudokuElement = {value: element, ans: ansList[i], correct: correct, provided: provided, shaded:false, selected:false, row: ROW, col: COL};
       return sudokuCellInfo
     })
     setSudokuBoard( sudokuElementList )  
@@ -128,7 +135,7 @@ const ansHandler = () => {
   const updatedSudokuElementList = sudokuBoard.map((element) => {
     // If the value is different from the ans, set shaded to true and correct value
     if (element.value !== element.ans) {
-      return { ...element, shaded: true , value : element.ans};
+      return { ...element, correct: false , value : element.ans};
     }
     return element;
   });
@@ -157,6 +164,9 @@ const ansHandler = () => {
                   shaded={sudokuElement.shaded}
                   row={sudokuElement.row}
                   col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
                   sudokuCellSelected={sudokuCellSelected}></SudokuCell>
               </div>)
               }
@@ -169,6 +179,9 @@ const ansHandler = () => {
                   shaded={sudokuElement.shaded}
                   row={sudokuElement.row}
                   col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
                   sudokuCellSelected={sudokuCellSelected}></SudokuCell>
               </div>)
               }
@@ -177,11 +190,14 @@ const ansHandler = () => {
               {
                 make9SectorSudokuBox(0,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
                   <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+                  initValue={sudokuElement.value}
+                  shaded={sudokuElement.shaded}
+                  row={sudokuElement.row}
+                  col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
+                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
                 </div>)
               }
             </div>
@@ -189,11 +205,14 @@ const ansHandler = () => {
               {
                 make9SectorSudokuBox(1,0).map((sudokuElement, index) => <div key={index*1 + "a"}>
                   <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+                  initValue={sudokuElement.value}
+                  shaded={sudokuElement.shaded}
+                  row={sudokuElement.row}
+                  col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
+                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
                 </div>)
               }
             </div>
@@ -201,11 +220,14 @@ const ansHandler = () => {
               {
                 make9SectorSudokuBox(1,1).map((sudokuElement, index) => <div key={index*1 + "a"}>
                   <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+                  initValue={sudokuElement.value}
+                  shaded={sudokuElement.shaded}
+                  row={sudokuElement.row}
+                  col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
+                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
                 </div>)
               }
             </div>
@@ -213,11 +235,14 @@ const ansHandler = () => {
               {
                 make9SectorSudokuBox(1,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
                   <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+                  initValue={sudokuElement.value}
+                  shaded={sudokuElement.shaded}
+                  row={sudokuElement.row}
+                  col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
+                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
                 </div>)
               }
             </div>
@@ -225,11 +250,14 @@ const ansHandler = () => {
               {
                 make9SectorSudokuBox(2,0).map((sudokuElement, index) => <div key={index*1 + "a"}>
                   <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+                  initValue={sudokuElement.value}
+                  shaded={sudokuElement.shaded}
+                  row={sudokuElement.row}
+                  col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
+                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
                 </div>)
               }
             </div>
@@ -237,11 +265,14 @@ const ansHandler = () => {
               {
                 make9SectorSudokuBox(2,1).map((sudokuElement, index) => <div key={index*1 + "a"}>
                   <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+                  initValue={sudokuElement.value}
+                  shaded={sudokuElement.shaded}
+                  row={sudokuElement.row}
+                  col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
+                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
                 </div>)
               }
             </div>
@@ -249,11 +280,14 @@ const ansHandler = () => {
               {
                 make9SectorSudokuBox(2,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
                   <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+                  initValue={sudokuElement.value}
+                  shaded={sudokuElement.shaded}
+                  row={sudokuElement.row}
+                  col={sudokuElement.col}
+                  provided={sudokuElement.provided}
+                  correct={sudokuElement.correct}
+                  showingAnswer={showingAnswer}
+                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
                   </div>)
               }
             </div>
