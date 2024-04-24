@@ -114,6 +114,7 @@ const fillSudokuCell = (number: number) => {
   setSudokuBoard(newSudokuBoard);
   setSelectingListener(false); // Reset listener state after input
 };
+
 const handleBackClick = () => {
   navigate('/mainmenu')
 }

@@ -6,8 +6,6 @@ import { HeaderBar } from "./components/HeaderBar";
 import { useAuth } from "./hooks/useAuth";
 import "./App.css";
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
 function App() {
   const { isLoggedIn, onLogin, onLogout, user, loadMe } = useAuth();
 
@@ -24,7 +22,7 @@ function App() {
       <p className={"font-bold text-5xl text-neutral-200 p-10"}>Psudoku</p>
 
       {isLoggedIn ? (
-        <FullSudokuGrid></FullSudokuGrid>
+        <MainMenu/>
       ) : (
         <AuthForm onLogin={onLogin}></AuthForm>
       )}
