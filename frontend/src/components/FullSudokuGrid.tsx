@@ -48,7 +48,7 @@ export default function FullSudokuGrid() {
 
       const provided = element != 0 ? true : false;
 
-      let sudokuCellInfo: SudokuElement = {value: element, shaded:false, selected:false, row: ROW, col: COL, provided: provided};
+      let sudokuCellInfo: SudokuElement = {value: element, shaded:false, selected:false, row: ROW, col: COL, provided: provided, note: [] };
       return sudokuCellInfo
     })
     setSudokuBoard( sudokuElementList )  
