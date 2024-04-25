@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SudokuCell from "./SudokuCell";
 import styles from '../keypad.module.css'; 
+import Note from "./Note";
 
 //explicitly telling the machine what our sudokuBoard array elements are
 interface SudokuElement {
@@ -10,12 +11,15 @@ interface SudokuElement {
   selected: boolean;
   row: number;
   col: number;
+  note: number[];
 }
 export default function FullSudokuGrid() {
   //contain api sudoku board values
   const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([])
 
   const [selectingListener, setSelectingListener]= useState(false)
+
+  const [showNote, SetshowNote] = useState(false);
 
 /**
   useEffect(() => {
@@ -44,7 +48,7 @@ export default function FullSudokuGrid() {
 
       const provided = element != 0 ? true : false;
 
-      let sudokuCellInfo: SudokuElement = {value: element, shaded:false, selected:false, row: ROW, col: COL, provided: provided};
+      let sudokuCellInfo: SudokuElement = {value: element, shaded:false, selected:false, row: ROW, col: COL, provided: provided, note: [] };
       return sudokuCellInfo
     })
     setSudokuBoard( sudokuElementList )  
@@ -94,162 +98,189 @@ const fillSudokuCell = (number: number) => {
 
   let newSudokuBoard: SudokuElement[] = sudokuBoard.map(cell => {
     // Check if the cell is shaded and editable, and if the input number is the same as the cell's current value
+    let newCell = { ...cell, shaded: false, selected: false };
     if (cell.selected && !cell.provided) {
       if (cell.value === number) {
         // If the same number is clicked, set value to zero and keep shaded
-        return { ...cell, value: 0, shaded: false, selected: false};
+        newCell = { ...cell, value: 0, shaded: false, selected: false};
       } else {
         // Otherwise, change the value to the new number and remove shading
-        return { ...cell, value: number, shaded: false, selected: false };
+        newCell =  { ...cell, value: number, shaded: false, selected: false };
       }
     }
+
+    if (cell.selected && showNote) {
+      const index = cell.note.indexOf(number);
+      if (index !== -1) {
+        cell.note.splice(index, 1);
+      } else {
+        cell.note.push(number)
+      }
+      newCell =  { ...cell, shaded: false, selected: false,note: cell.note};
+    }
+
     // Unshade all other cells
-    return { ...cell, shaded: false, selected: false };
+    return newCell;
   });
 
   setSudokuBoard(newSudokuBoard);
   setSelectingListener(false); // Reset listener state after input
 };
 
+const eraseHandler = () => {
+  setSelectingListener(false)
+  setSudokuBoard(sudokuBoard.map((element) => {
+    if (element.shaded === true) element.shaded = false
+    if (element.selected && showNote) {
+      return { ...element, note:[] };
+    }
+    element.selected=false;
+    return element;
+  }));
+}
 
-  return <div className={"grid grid-cols-3 items-center"}>
-    <div className="grid grid-cols-3 col-span-2 outline outline-4 m-8 rounded-3xl">
-      {sudokuBoard.length===81 &&
-        <>
-          <div className="grid grid-cols-3 outline outline-2 rounded-tl-3xl">
-              {
-                make9SectorSudokuBox(0,0).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                <SudokuCell 
-                  initValue={sudokuElement.value}
-                  shaded={sudokuElement.shaded}
-                  row={sudokuElement.row}
-                  col={sudokuElement.col}
-                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+
+return <div className={"grid grid-cols-3 items-center"}>
+{showNote?
+<Note sudokuCellSelected={sudokuCellSelected} makeSectorSudokuBox={make9SectorSudokuBox} sudokuBoard={sudokuBoard} />
+:
+<div className="grid grid-cols-3 col-span-2 outline outline-4 m-8 rounded-3xl">
+  {sudokuBoard.length===81 &&
+    <>
+      <div className="grid grid-cols-3 outline outline-2 rounded-tl-3xl">
+          {
+            make9SectorSudokuBox(0,0).map((sudokuElement, index) => <div key={index*1 + "a"}>
+            <SudokuCell 
+              initValue={sudokuElement.value}
+              shaded={sudokuElement.shaded}
+              row={sudokuElement.row}
+              col={sudokuElement.col}
+              sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+          </div>)
+          }
+        </div>
+        <div className="grid grid-cols-3 outline outline-2">
+          {
+            make9SectorSudokuBox(0,1).map((sudokuElement, index) => <div key={index*1 + "a"}>
+            <SudokuCell 
+              initValue={sudokuElement.value}
+              shaded={sudokuElement.shaded}
+              row={sudokuElement.row}
+              col={sudokuElement.col}
+              sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+          </div>)
+          }
+        </div>
+        <div className="grid grid-cols-3 outline outline-2 rounded-tr-3xl">
+          {
+            make9SectorSudokuBox(0,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
+              <SudokuCell 
+                initValue={sudokuElement.value}
+                shaded={sudokuElement.shaded}
+                row={sudokuElement.row}
+                col={sudokuElement.col}
+                sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+            </div>)
+          }
+        </div>
+        <div className="grid grid-cols-3 outline outline-2">
+          {
+            make9SectorSudokuBox(1,0).map((sudokuElement, index) => <div key={index*1 + "a"}>
+              <SudokuCell 
+                initValue={sudokuElement.value}
+                shaded={sudokuElement.shaded}
+                row={sudokuElement.row}
+                col={sudokuElement.col}
+                sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+            </div>)
+          }
+        </div>
+        <div className="grid grid-cols-3 outline outline-2">
+          {
+            make9SectorSudokuBox(1,1).map((sudokuElement, index) => <div key={index*1 + "a"}>
+              <SudokuCell 
+                initValue={sudokuElement.value}
+                shaded={sudokuElement.shaded}
+                row={sudokuElement.row}
+                col={sudokuElement.col}
+                sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+            </div>)
+          }
+        </div>
+        <div className="grid grid-cols-3 outline outline-2">
+          {
+            make9SectorSudokuBox(1,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
+              <SudokuCell 
+                initValue={sudokuElement.value}
+                shaded={sudokuElement.shaded}
+                row={sudokuElement.row}
+                col={sudokuElement.col}
+                sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+            </div>)
+          }
+        </div>
+        <div className="grid grid-cols-3 outline outline-2 rounded-bl-3xl">
+          {
+            make9SectorSudokuBox(2,0).map((sudokuElement, index) => <div key={index*1 + "a"}>
+              <SudokuCell 
+                initValue={sudokuElement.value}
+                shaded={sudokuElement.shaded}
+                row={sudokuElement.row}
+                col={sudokuElement.col}
+                sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+            </div>)
+          }
+        </div>
+        <div className="grid grid-cols-3 outline outline-2">
+          {
+            make9SectorSudokuBox(2,1).map((sudokuElement, index) => <div key={index*1 + "a"}>
+              <SudokuCell 
+                initValue={sudokuElement.value}
+                shaded={sudokuElement.shaded}
+                row={sudokuElement.row}
+                col={sudokuElement.col}
+                sudokuCellSelected={sudokuCellSelected}></SudokuCell>
+            </div>)
+          }
+        </div>
+        <div className="grid grid-cols-3 outline outline-2 rounded-br-3xl">
+          {
+            make9SectorSudokuBox(2,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
+              <SudokuCell 
+                initValue={sudokuElement.value}
+                shaded={sudokuElement.shaded}
+                row={sudokuElement.row}
+                col={sudokuElement.col}
+                sudokuCellSelected={sudokuCellSelected}></SudokuCell>
               </div>)
-              }
-            </div>
-            <div className="grid grid-cols-3 outline outline-2">
-              {
-                make9SectorSudokuBox(0,1).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                <SudokuCell 
-                  initValue={sudokuElement.value}
-                  shaded={sudokuElement.shaded}
-                  row={sudokuElement.row}
-                  col={sudokuElement.col}
-                  sudokuCellSelected={sudokuCellSelected}></SudokuCell>
-              </div>)
-              }
-            </div>
-            <div className="grid grid-cols-3 outline outline-2 rounded-tr-3xl">
-              {
-                make9SectorSudokuBox(0,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                  <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
-                </div>)
-              }
-            </div>
-            <div className="grid grid-cols-3 outline outline-2">
-              {
-                make9SectorSudokuBox(1,0).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                  <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
-                </div>)
-              }
-            </div>
-            <div className="grid grid-cols-3 outline outline-2">
-              {
-                make9SectorSudokuBox(1,1).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                  <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
-                </div>)
-              }
-            </div>
-            <div className="grid grid-cols-3 outline outline-2">
-              {
-                make9SectorSudokuBox(1,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                  <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
-                </div>)
-              }
-            </div>
-            <div className="grid grid-cols-3 outline outline-2 rounded-bl-3xl">
-              {
-                make9SectorSudokuBox(2,0).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                  <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
-                </div>)
-              }
-            </div>
-            <div className="grid grid-cols-3 outline outline-2">
-              {
-                make9SectorSudokuBox(2,1).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                  <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
-                </div>)
-              }
-            </div>
-            <div className="grid grid-cols-3 outline outline-2 rounded-br-3xl">
-              {
-                make9SectorSudokuBox(2,2).map((sudokuElement, index) => <div key={index*1 + "a"}>
-                  <SudokuCell 
-                    initValue={sudokuElement.value}
-                    shaded={sudokuElement.shaded}
-                    row={sudokuElement.row}
-                    col={sudokuElement.col}
-                    sudokuCellSelected={sudokuCellSelected}></SudokuCell>
-                  </div>)
-              }
-            </div>
-        </>
-      }
-    </div>
+          }
+        </div>
+    </>
+  }
+</div>}
 
-    <div className={"col-span-1"}>
-      <div className={styles.keypadContainer}>
-            <div className={styles.modeContainer}>
-              <div className={styles.modeLabel}>Mode:</div>
-              <div className={styles.modeSection}>
-                <button className={styles.modeButton}>NORMAL</button>
-                <button className={styles.modeButton}>NOTES</button>
-              </div>
-            </div>
-
-            <div className={styles.numbersSection}>
-              {Array.from({ length: 9 }, (_, i) => (
-                 <button onClick={() => fillSudokuCell(i + 1)} key={i} className={styles.numberButton}>{i + 1}</button>
-              ))}
-            </div>
-
-            <div className={styles.actionsSection}>
-              <button className={styles.actionButton}>UNDO</button>
-              <button className={styles.actionButton}>ERASE</button>
-            </div>
+<div className={"col-span-1"}>
+  <div className={styles.keypadContainer}>
+        <div className={styles.modeContainer}>
+          <div className={styles.modeLabel}>Mode:</div>
+          <div className={styles.modeSection}>
+            <button className={styles.modeButton} onClick={() => SetshowNote(false)}>NORMAL</button>
+            <button className={styles.modeButton} onClick={() => SetshowNote(true)}>NOTES</button>
           </div>
-    </div>
-  </div>
-  
+        </div>
+
+        <div className={styles.numbersSection}>
+          {Array.from({ length: 9 }, (_, i) => (
+             <button onClick={() => fillSudokuCell(i + 1)} key={i} className={styles.numberButton}>{i + 1}</button>
+          ))}
+        </div>
+
+        <div className={styles.actionsSection}>
+          {!showNote && <button className={styles.actionButton}>UNDO</button>}
+          <button className={styles.actionButton} onClick={eraseHandler}>ERASE</button>
+        </div>
+      </div>
+</div>
+</div>
+
 }
