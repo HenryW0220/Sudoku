@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "../keypad.module.css"
 import FullSudokuGrid from "./FullSudokuGrid";
 
-interface MainMenuProps{
-  setBoardSelected: (isBoardSelected: boolean) => void;
-}
-
-export default function MainMenu({setBoardSelected}: MainMenuProps) {
+export default function MainMenu() {
 
   const [boardIds, setBoardIds] = useState([]);
   const [selectedBoardId, setSelectedBoardId] = useState(0);
@@ -34,25 +30,23 @@ export default function MainMenu({setBoardSelected}: MainMenuProps) {
 
   const handleBoardClick = (boardId: number) => {
     setSelectedBoardId(boardId);
-    console.log("selected board id: ", selectedBoardId);
-    setBoardSelected(true)
   };
 
-  console.log("selected before rendering: ", selectedBoardId);
-return <>
-    <h1 className={"font-bold text-3xl text-neutral-200 p-1"}>Welcome!</h1>
-    <h1 className={"font-bold text-3xl text-neutral-200 p-1"}>Start a New Game:</h1>
+  return <>
+    <h1 className={"font-bold text-3xl text-neutral-200 pb-1"}>Welcome!</h1>
+    <h1 className={"font-bold text-3xl text-neutral-200 pb-2"}>Start a New Game:</h1>
     <div style={{ display: "flex", flexDirection: "row"}}>
         {
           boardIds.map(id =>
               <button className={styles.boardButton} key={id} onClick={() => handleBoardClick(id)}>
-                Board {id} Level: {getBoardLevel(id)}
+                <span>Board {id} </span>
+                <span>Level: {getBoardLevel(id)}</span>
               </button>
           )
         }
     </div>
     {
-      selectedBoardId !== 0 ? (<FullSudokuGrid boardId={selectedBoardId} resetBoardId={setSelectedBoardId}/>) : null
+      selectedBoardId !== 0 ? (<FullSudokuGrid boardId={selectedBoardId} resetBoardId={setSelectedBoardId} />) : null
     }
   </>
 }

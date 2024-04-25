@@ -119,6 +119,7 @@ const fillSudokuCell = (number: number) => {
 };
 
   const handleBackClick = () => {
+    // Indicates no board has been chosen
     resetBoardId(0);
   }
 
@@ -259,8 +260,8 @@ const fillSudokuCell = (number: number) => {
               <button className={styles.actionButton}>ERASE</button>
             </div>
           </div>
-          <div className={styles.mainMenuButton}>
-            <button onClick={handleBackClick}>Back to Main Menu</button>
+          <div className={styles.quitButton}>
+            <button onClick={handleBackClick}>QUIT</button>
           </div>
     </div>
   </div>
