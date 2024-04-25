@@ -1,31 +1,26 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import styles from "../keypad.module.css"
+import FullSudokuGrid from "./FullSudokuGrid";
 
+interface MainMenuProps{
+  setBoardSelected: (isBoardSelected: boolean) => void;
+}
 
-export default function MainMenu() {
+export default function MainMenu({setBoardSelected}: MainMenuProps) {
 
-  const [boards, setBoards] = useState([]);
-  const [testBoards, setTestBoards] = useState([
-    [1005, [1, 2, 3], [1, 2, 3], 'Easy'],
-    [1006, [4, 5, 6], [4, 5, 6], 'Medium'],
-    [1007, [8, 9, 0], [8, 9, 0], 'Hard'],
-    [1008, [1, 3, 5], [2, 4, 6], 'Extreme']
-  ]);
+  const [boardIds, setBoardIds] = useState([]);
+  const [selectedBoardId, setSelectedBoardId] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:5002/boards/retrieve_all_boards')
+    fetch('http://localhost:5002/boards/retrieve_all_board_ids')
     .then(res => res.json())
     .then(json => {
-      setBoards(json)
+      setBoardIds(json)
     })
   }, []);
 
-  // retrieve all boards IDs
-  // get single board with id, send entire single board
-
-  const getBoardLevel = (boardID: number) => {
-    switch(boardID % 3){
+  const getBoardLevel = (boardId: number) => {
+    switch(boardId % 3){
       case 0:
         return 'Hard';
       case 1:
@@ -37,20 +32,27 @@ export default function MainMenu() {
     }
   };
 
-  return <>
+  const handleBoardClick = (boardId: number) => {
+    setSelectedBoardId(boardId);
+    console.log("selected board id: ", selectedBoardId);
+    setBoardSelected(true)
+  };
+
+  console.log("selected before rendering: ", selectedBoardId);
+return <>
     <h1 className={"font-bold text-3xl text-neutral-200 p-1"}>Welcome!</h1>
     <h1 className={"font-bold text-3xl text-neutral-200 p-1"}>Start a New Game:</h1>
     <div style={{ display: "flex", flexDirection: "row"}}>
         {
-          testBoards.map(board =>
-            <Link key={String(board[0])} to={`/fullsudokugrid/${board[0]}`}>
-              <button className={styles.boardButton}>
-                Board {board[0]} Level: {board[3]}
+          boardIds.map(id =>
+              <button className={styles.boardButton} key={id} onClick={() => handleBoardClick(id)}>
+                Board {id} Level: {getBoardLevel(id)}
               </button>
-            </Link>
           )
         }
     </div>
+    {
+      selectedBoardId !== 0 ? (<FullSudokuGrid boardId={selectedBoardId} resetBoardId={setSelectedBoardId}/>) : null
+    }
   </>
-  
 }

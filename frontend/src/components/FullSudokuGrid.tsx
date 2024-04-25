@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import SudokuCell from "./SudokuCell";
 import styles from '../keypad.module.css'; 
-import { useNavigate, useParams } from "react-router-dom";
 
 //explicitly telling the machine what our sudokuBoard array elements are
 interface SudokuElement {
@@ -12,14 +11,18 @@ interface SudokuElement {
   row: number;
   col: number;
 }
-export default function FullSudokuGrid() {
+
+interface FullSudokuGridProps{
+  boardId: number;
+  resetBoardId: (boardId: number) => void;
+}
+
+export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridProps) {
   //contain api sudoku board values
   const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([])
 
   const [selectingListener, setSelectingListener]= useState(false)
 
-  const { boardId } = useParams<{ boardId: string }>();
-  const navigate = useNavigate();
 
 /**
   useEffect(() => {
@@ -115,9 +118,9 @@ const fillSudokuCell = (number: number) => {
   setSelectingListener(false); // Reset listener state after input
 };
 
-const handleBackClick = () => {
-  navigate('/mainmenu')
-}
+  const handleBackClick = () => {
+    resetBoardId(0);
+  }
 
   return <div className={"grid grid-cols-3 items-center"}>
     <div className="grid grid-cols-3 col-span-2 outline outline-4 m-8 rounded-3xl">

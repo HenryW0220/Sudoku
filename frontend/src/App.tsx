@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import MainMenu from './components/MainMenu';
-import FullSudokuGrid from "./components/FullSudokuGrid";
+import { useState } from "react";
 import { AuthForm } from "./components/AuthForm";
 import { HeaderBar } from "./components/HeaderBar";
 import { useAuth } from "./hooks/useAuth";
@@ -8,6 +8,7 @@ import "./App.css";
 
 function App() {
   const { isLoggedIn, onLogin, onLogout, user, loadMe } = useAuth();
+  const [isBoardSelected, setIsBoardSelected] = useState(false);
 
   // Define an effect to run when the component mounts
   useEffect(() => {
@@ -16,13 +17,13 @@ function App() {
   }, [loadMe]);
 
   return (
-    <div className={"bg-indigo-900 h-screen w-full flex flex-col items-center"}>
+    <div className={"bg-indigo-900 min-h-screen w-full flex flex-col items-center overflow-y-auto"}>
       {isLoggedIn && <HeaderBar user={user} onLogout={onLogout} />}
 
-      <p className={"font-bold text-5xl text-neutral-200 p-10"}>Psudoku</p>
+      <p className={"font-bold text-5xl text-neutral-200 p-11"}>Psudoku</p>
 
-      {isLoggedIn ? (
-        <MainMenu/>
+      {(isLoggedIn && !isBoardSelected) ? (
+        <MainMenu setBoardSelected={setIsBoardSelected}/>
       ) : (
         <AuthForm onLogin={onLogin}></AuthForm>
       )}
