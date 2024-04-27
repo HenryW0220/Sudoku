@@ -29,7 +29,6 @@ def get_db_connection():
     cursor = connection.cursor()
     return connection, cursor
 
-
 """
 
     GET ENDPOINTS

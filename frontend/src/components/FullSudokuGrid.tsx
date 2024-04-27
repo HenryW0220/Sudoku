@@ -13,11 +13,18 @@ interface SudokuElement {
   col: number;
   note: number[];
 }
-export default function FullSudokuGrid() {
+
+interface FullSudokuGridProps{
+  boardId: number;
+  resetBoardId: (boardId: number) => void;
+}
+
+export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridProps) {
   //contain api sudoku board values
   const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([])
 
   const [selectingListener, setSelectingListener]= useState(false)
+
 
   const [showNote, SetshowNote] = useState(false);
 
@@ -139,6 +146,10 @@ const eraseHandler = () => {
   }));
 }
 
+  const handleBackClick = () => {
+    // Indicates no board has been chosen
+    resetBoardId(0);
+  }
 
 return <div className={"grid grid-cols-3 items-center"}>
 {showNote?
@@ -258,29 +269,33 @@ return <div className={"grid grid-cols-3 items-center"}>
     </>
   }
 </div>}
-
-<div className={"col-span-1"}>
-  <div className={styles.keypadContainer}>
+<div>
+  <div className={"col-span-1"}>
+    <div className={styles.keypadContainer}>
         <div className={styles.modeContainer}>
           <div className={styles.modeLabel}>Mode:</div>
           <div className={styles.modeSection}>
-            <button className={styles.modeButton} onClick={() => SetshowNote(false)}>NORMAL</button>
-            <button className={styles.modeButton} onClick={() => SetshowNote(true)}>NOTES</button>
+              <button className={styles.modeButton} onClick={() => SetshowNote(false)}>NORMAL</button>
+              <button className={styles.modeButton} onClick={() => SetshowNote(true)}>NOTES</button>
           </div>
         </div>
 
         <div className={styles.numbersSection}>
           {Array.from({ length: 9 }, (_, i) => (
-             <button onClick={() => fillSudokuCell(i + 1)} key={i} className={styles.numberButton}>{i + 1}</button>
+            <button onClick={() => fillSudokuCell(i + 1)} key={i} className={styles.numberButton}>{i + 1}</button>
           ))}
         </div>
 
         <div className={styles.actionsSection}>
-          {!showNote && <button className={styles.actionButton}>UNDO</button>}
-          <button className={styles.actionButton} onClick={eraseHandler}>ERASE</button>
+            {!showNote && <button className={styles.actionButton}>UNDO</button>}
+            <button className={styles.actionButton} onClick={eraseHandler}>ERASE</button>
         </div>
       </div>
+      <div className={styles.quitButton}>
+              <button onClick={handleBackClick}>QUIT</button>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-
+  
 }

@@ -36,6 +36,7 @@ export function AuthForm({ onLogin }: any) {
       }
       // If the response is ok, get the data
       const data = await response.json();
+ 
       // If the data contains a token, set the token in local storage
       if (data.token) {
         localStorage.setItem("token", data.token);
