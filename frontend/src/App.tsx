@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import FullSudokuGrid from "./components/FullSudokuGrid";
+import MainMenu from './components/MainMenu';
 import { AuthForm } from "./components/AuthForm";
 import { HeaderBar } from "./components/HeaderBar";
 import { useAuth } from "./hooks/useAuth";
@@ -15,16 +15,14 @@ function App() {
   }, [loadMe]);
 
   return (
-    <div className={"bg-indigo-900 h-screen w-full flex flex-col items-center"}>
+    <div className={"bg-indigo-900 h-screen w-full flex flex-col items-center overflow-y-auto"}>
       {isLoggedIn && <HeaderBar user={user} onLogout={onLogout} />}
 
-      <p className={"font-bold text-5xl text-neutral-200 p-10"}>Psudoku</p>
+      <p className={"font-bold text-5xl text-neutral-200 pt-12 pb-8"}>Psudoku</p>
 
-      {isLoggedIn ? (
-        <FullSudokuGrid></FullSudokuGrid>
-      ) : (
-        <AuthForm onLogin={onLogin}></AuthForm>
-      )}
+      {
+        isLoggedIn ? (<MainMenu />) : (<AuthForm onLogin={onLogin}></AuthForm>)
+      }
     </div>
   );
 }
