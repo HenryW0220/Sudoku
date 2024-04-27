@@ -13,6 +13,22 @@ def mock_get_db_connection(fetchone_return_value):
         return connection, cursor
     return mock_db_connection
 
+def mock_get_all_db_connection(fetchall_return_value):
+    def mock_db_connection():
+        connection = MagicMock()
+        cursor = MagicMock()
+        cursor.fetchall.return_value = [(board_id,) for board_id in fetchall_return_value]
+        return connection, cursor
+    return mock_db_connection
+
+def mock_get__db_connection(fetchall_return_value):
+    def mock_db_connection():
+        connection = MagicMock()
+        cursor = MagicMock()
+        cursor.fetchall.return_value = fetchall_return_value
+        return connection, cursor
+    return mock_db_connection
+
 # Define the mock_post_db_connection function to create a closure
 def mock_post_db_connection(fetchone_return_value):
     def mock_db_connection():
@@ -31,7 +47,12 @@ def client():
     with app.test_client() as client:
         yield client
 
-# Test cases
+
+"""
+
+    GET ENDPOINTS TESTS
+
+"""
 def test_retrieve_board_found(client, monkeypatch):
     # Board found scenario
     expected_board_id = 0
@@ -68,6 +89,68 @@ def test_retrieve_board_not_found(client, monkeypatch):
     assert response.status_code == 404
     assert response.json == {'message': 'Invalid Board ID: Board Not Found'}
 
+def test_retrieve_all_board_ids(client, monkeypatch):
+    expected_board_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+    # Mocking the database connection function to return the expected board IDs
+    monkeypatch.setattr('app.get_db_connection', mock_get_all_db_connection(expected_board_ids))
+
+    response = client.get('/boards/retrieve_all_board_ids')
+
+    # Assert response
+    assert response.status_code == 200
+    assert response.json == expected_board_ids
+
+# Define the test case for retrieve_all_users endpoint
+def test_retrieve_all_users(client, monkeypatch):
+    # Define the expected users from the database
+    expected_users = [(1, 'User1'), (2, 'User2'), (3, 'User3')]
+
+    # Mocking the database connection function to return the expected users
+    monkeypatch.setattr('app.get_db_connection', mock_get__db_connection(expected_users))
+
+    # Make a request to the endpoint
+    response = client.get('/users/retrieve_all_users')
+
+    # Assert response
+    assert response.status_code == 200
+    assert response.json == [{'user_id': user[0], 'user_name': user[1]} for user in expected_users] 
+
+# Define the test case for retrieve_user endpoint
+def test_retrieve_user_found(client, monkeypatch):
+    # Define the expected user ID and name from the database
+    expected_user_id = 1
+    expected_user_name = 'User1'
+
+    # Mocking the database connection function to return the expected user
+    monkeypatch.setattr('app.get_db_connection', mock_get_db_connection((expected_user_id, expected_user_name)))
+
+    # Make a request to the endpoint
+    response = client.get(f'/users/retrieve_user/{expected_user_id}')
+
+    # Assert response
+    assert response.status_code == 200
+    assert response.json == {'user_id': expected_user_id, 'user_name': expected_user_name}
+
+def test_retrieve_user_not_found(client, monkeypatch):
+    # Define a user ID that does not exist in the database
+    non_existent_user_id = 999
+
+    # Mocking the database connection function to return None (user not found)
+    monkeypatch.setattr('app.get_db_connection', mock_get_db_connection(None))
+
+    # Make a request to the endpoint
+    response = client.get(f'/users/retrieve_user/{non_existent_user_id}')
+
+    # Assert response
+    assert response.status_code == 404
+    assert response.json == {'message': 'Invalid User ID: User Not Found'}
+
+"""
+
+    POST ENDPOINTS TESTS
+
+"""
 def test_store_board_success(client, monkeypatch):
     # Store board success scenario
     board_id = 9999
