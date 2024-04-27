@@ -86,49 +86,50 @@ export default function FullSudokuGrid() {
   }
 
 
-const sudokuCellSelected= (row:number, col:number) => {
-  if(selectingListener) return
+const sudokuCellSelected = (row: number, col: number) => {
+  let newSudokuBoard: SudokuElement[] = sudokuBoard.map((cell, index) => {
+    // Calculate row and column based on index
+    const currentRow = Math.floor(index / 9) + 1;
+    const currentCol = index % 9 + 1;
 
-  let newSudokuBoard: SudokuElement[]= [...sudokuBoard]
+    // Determine if the cell is in the same row, column, or box
+    const inSameRow = currentRow === row;
+    const inSameCol = currentCol === col;
+    const inSameBox = Math.floor((row - 1) / 3) === Math.floor((currentRow - 1) / 3) &&
+                      Math.floor((col - 1) / 3) === Math.floor((currentCol - 1) / 3);
 
-  newSudokuBoard[(row-1)*9 + (col)-1].selected= true
-  setSelectingListener(true)
+    return {
+      ...cell,
+      shaded: inSameRow || inSameCol || inSameBox,
+      selected: currentRow === row && currentCol === col
+    };
+  });
 
+  setSudokuBoard(newSudokuBoard);
+  setSelectingListener(true);
+};
 
-  //shading row
-  for(let i= (row-1)*9 ; i<row*9 ; i++){
-    newSudokuBoard[i].shaded= true
-  }
+const fillSudokuCell = (number: number) => {
+  if (!selectingListener) return; // Prevent input if no cell is selected
 
-  //shading col
-  for(let i= col-1 ; i<81 ; i+=9){
-    newSudokuBoard[i].shaded= true
-  }
-
-  //shading box
-  const rowSector= Math.floor((row-1)/3)
-  const colSector= Math.floor((col-1)/3)
-  const startIndex: number= ((rowSector*3) *9) + (colSector*3)
-    for(let i=0; i < 3 ; i++){
-      for(let j=startIndex; j < startIndex +3 ; j++){
-        newSudokuBoard[ (i*9) +j ].shaded=true
+  let newSudokuBoard: SudokuElement[] = sudokuBoard.map(cell => {
+    // Check if the cell is shaded and editable, and if the input number is the same as the cell's current value
+    if (cell.selected && !cell.provided) {
+      if (cell.value === number) {
+        // If the same number is clicked, set value to zero and keep shaded
+        return { ...cell, value: 0, shaded: false, selected: false};
+      } else {
+        // Otherwise, change the value to the new number and remove shading
+        return { ...cell, value: number, shaded: false, selected: false };
       }
     }
+    // Unshade all other cells
+    return { ...cell, shaded: false, selected: false };
+  });
 
-  setSudokuBoard(newSudokuBoard)
-}
-
-//resets shading, fills in value of selected cell(not done yet)
-const fillSudokuCell= () => {
-  setSelectingListener(false)
-  let newSudokuBoard: SudokuElement[]= [...sudokuBoard]
-  newSudokuBoard= newSudokuBoard.map(element => {
-    if(element.shaded===true) element.shaded= false
-    return element
-  })
-  console.log(newSudokuBoard)
-  setSudokuBoard(sudokuBoard)
-}
+  setSudokuBoard(newSudokuBoard);
+  setSelectingListener(false); // Reset listener state after input
+};
 
 const ansHandler = () => {
 
@@ -136,6 +137,9 @@ const ansHandler = () => {
     // If the value is different from the ans, set shaded to true and correct value
     if (element.value !== element.ans) {
       return { ...element, correct: false , value : element.ans};
+    }
+    else {
+      return { ...element, correct: true , value : element.ans};
     }
     return element;
   });
@@ -307,7 +311,7 @@ const ansHandler = () => {
 
             <div className={styles.numbersSection}>
               {Array.from({ length: 9 }, (_, i) => (
-                <button onClick={fillSudokuCell} key={i} className={styles.numberButton}>{i + 1}</button>
+                 <button onClick={() => fillSudokuCell(i + 1)} key={i} className={styles.numberButton}>{i + 1}</button>
               ))}
             </div>
 

@@ -1,20 +1,15 @@
-import { useState, useEffect } from "react"
-//import Lottie from "lottie-react"
-//import animationData from '../lotties/correctAnimation.json'
+import { useEffect, useState } from "react";
 
 export default function SudokuCell(props: any) {
-    const row= props.row
-    const column= props.col
     // eslint-disable-next-line
-    const [inputNumber, changeInputNumber] = useState(0)
+    const [inputNumber, changeInputNumber] = useState(props.initValue);
     const [color, setColor] = useState("");
-    const sudokuCellClicked = () => {
-        props.sudokuCellSelected(row, column)
-    }
 
-    const updateColor = () => {
-        
-    }
+    // Update local state when props.initValue changes from user input/keypad
+
+    const handleCellClick = () => {
+        props.sudokuCellSelected(props.row, props.col);
+    };
 
     useEffect(() => {
         // updates number
@@ -34,17 +29,19 @@ export default function SudokuCell(props: any) {
         }
     },[props])
 
-    // if provided leave white, if wrong red if right green (make it aesthetic = lighter)
-    return <div onClick={sudokuCellClicked} className= {`outline outline-1 p-1 size-16 ${color} flex items-center hover:bg-slate-200 transition-color duration-150
-                ${props.row===1 && props.col===1 && "rounded-tl-3xl"}
-                ${props.row===1 && props.col===9 && "rounded-tr-3xl"}
-                ${props.row===9 && props.col===1 && "rounded-bl-3xl"}
-                ${props.row===9 && props.col===9 && "rounded-br-3xl"}`}>
-                <span className="relative flex size-12">
-                    <p className={`size-16 text-center mt-4`}>{inputNumber == 0 ? "" : inputNumber}</p>
-                    {props.shaded &&
-                        <span className="ease-in-out animate-ping absolute rounded-sm h-8 w-8 bg-purple-100 opacity-50"></span>
-                    }
-                </span>
+    return (
+        <div onClick={handleCellClick} className={`outline outline-1 p-1 size-16 
+            ${color} flex items-center hover:bg-slate-200 transition-color duration-150
+            ${props.row === 1 && props.col === 1 && "rounded-tl-3xl"}
+            ${props.row === 1 && props.col === 9 && "rounded-tr-3xl"}
+            ${props.row === 9 && props.col === 1 && "rounded-bl-3xl"}
+            ${props.row === 9 && props.col === 9 && "rounded-br-3xl"}`}>
+            <span className="relative flex size-12">
+                <p className={`size-16 text-center mt-4`}>{props.provided ? <b>{inputNumber === 0 ? "" : inputNumber} </b> : <> {inputNumber === 0 ? "" : inputNumber}</>}</p>
+                {props.shaded &&
+                    <span className="ease-in-out animate-ping absolute rounded-sm h-8 w-8 bg-purple-100 opacity-90"></span>
+                }
+            </span>
         </div>
+    );
 }

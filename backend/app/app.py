@@ -2,9 +2,14 @@ from typing import List, Dict
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 import mysql.connector
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
+
 CORS(app)
+app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this!
+jwt = JWTManager(app)
 
 
 def get_db_connection():
@@ -32,13 +37,13 @@ def get_db_connection():
 """
 
 
-@app.get('/boards/retrieve_all_boards')
-def retrieve_all_boards():
+@app.get('/boards/retrieve_all_board_ids')
+def retrieve_all_board_ids():
     """
-    This function handles the GET request to retrieve all boards from the database.
+    This function handles the GET request to retrieve all board ids from the database.
 
     Returns:
-    JSON: A JSON response containing all boards in the database.
+    JSON: A JSON response containing all board ids in the database.
     """
     # Connect to MySQL DB
     connection, cursor = get_db_connection()
@@ -48,8 +53,7 @@ def retrieve_all_boards():
     connection.close()
 
     # Parse results into list of lists with id followed by contents
-    boards_list = [(board[0], [int(num) for num in board[1].split()], [
-                    int(num) for num in board[2].split()]) for board in boards]
+    boards_list = [board[0] for board in boards]
 
     response = jsonify(boards_list)
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -81,21 +85,46 @@ def retrieve_board(board_id):
     print(result)
     if result:
         # Get board contents from the query result
-        board_contents = result[1]
-        # Convert the board contents to a list of integers
-        board_contents = [int(num) for num in board_contents.split()]
-        # Get board answer from the query result
-        board_answer = result[2]
-        # Convert the board answer to a list of integers
-        board_answer = [int(num) for num in board_answer.split()]
-        # Parse result into list with id followed by contents
-        sudoku_board = [board_id] + board_contents + board_answer
+        board_id, board_contents, board_answer = result
 
-        response = jsonify(sudoku_board)
+        board_contents = [int(num)
+                          for num in board_contents.split()]
+        board_answer = [int(num) for num in board_answer.split()]
+
+        response_data = {
+            'board_id': board_id,
+            'board_contents': board_contents,
+            'board_answer': board_answer
+        }
+        response = jsonify(response_data)
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
     else:
         return jsonify({'message': 'Invalid Board ID: Board Not Found'}), 404
+
+
+@app.get('/users/<int:user_id>/partial_boards/retrieve_all_partial_board_ids')
+def retrieve_all_partial_board_ids(user_id):
+    """
+    This function handles the GET request to retrieve all partial board ids from the database.
+
+    Returns:
+    JSON: A JSON response containing all partial board ids in the database.
+    """
+    # Connect to MySQL DB
+    connection, cursor = get_db_connection()
+    cursor.execute('USE TEST_DB')
+    cursor.execute('SELECT * FROM PartialBoard')
+    boards = cursor.fetchall()
+    connection.close()
+
+    # Format results into list of dictionaries
+    boards_list = [{'user_id': board[0], 'board_id': board[1]}
+                   for board in boards]
+
+    response = jsonify(boards_list)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 @app.get('/users/<int:user_id>/partial_boards/retrieve_partial_board/<int:board_id>')
@@ -291,6 +320,101 @@ def store_partial_board(user_id, board_id):
     else:
         return jsonify({'message': 'Partial Board Contents Not Provided: Bad Request'}), 400
 
+
+@app.route('/login', methods=['POST'])
+def login():
+    """
+    Log in a user by providing a username and password.
+
+    Parameters:
+        username (str): The username of the user.
+        password (str): The password of the user.
+
+    Returns:
+        A JSON response containing a success message and a JWT token if the login is successful,
+        or an error message if the user is not found or the password is incorrect.
+    """
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    cnx, cursor = get_db_connection()
+    cursor = cnx.cursor(dictionary=True)
+
+    # Check if the user exists in the database
+    query = "SELECT * FROM User WHERE user_name = %s"
+    cursor.execute(query, (username,))
+    user = cursor.fetchone()
+
+    if user is not None:
+        if check_password_hash(user['user_pwd'], password):
+            # Use the create_jwt function to create a token
+            token = create_access_token(identity=username)
+            return jsonify({"message": "Login successful", "token": token, "username":username}), 200
+        else:
+            return jsonify({"message": "Wrong password"}), 401
+
+    return jsonify({"message": "User not found"}), 404
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    """
+    Register a new user in the system.
+
+    Parameters:
+        username (str): The username of the user.
+        password (str): The password of the user.
+
+    Returns:
+        A JSON response containing a success message if the user is registered successfully, or an error message if the username is already taken.
+    """
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    cnx, cursor = get_db_connection()
+
+    # Check if the user_name has already been registered
+    query = "SELECT * FROM User WHERE user_name = %s"
+    cursor.execute(query, (username,))
+    if cursor.fetchone() is not None:
+        return jsonify({"message": "Username already exists"}), 400
+
+    # Hash the password
+    hashed_password = generate_password_hash(password)
+
+    # Insert the new user into the database
+    query = "INSERT INTO User (user_name, user_pwd) VALUES (%s, %s)"
+    cursor.execute(query, (username, hashed_password))
+    cnx.commit()
+
+    return jsonify({"message": "User registered successfully"}), 201
+
+@app.route('/me', methods=['GET'])
+@jwt_required()
+def me():
+    """
+    Get the information of the currently logged-in user.
+
+    Returns:
+        A JSON response containing the user's information if found, or an error message if not found.
+    """
+    # Use the get_jwt_identity function to get the identity
+    username = get_jwt_identity()
+
+    # Get the user's information from the database
+    cnx, cursor = get_db_connection()
+    cursor = cnx.cursor(dictionary=True)
+    query = "SELECT * FROM User WHERE user_name = %s"
+    cursor.execute(query, (username,))
+    user = cursor.fetchone()
+
+    if user is not None:
+        # Return the user's information
+        return jsonify({"message": "User found", "username": user['user_name']}), 200
+    else:
+        return jsonify({"message": "User not found"}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5002, debug=True)
