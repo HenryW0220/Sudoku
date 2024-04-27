@@ -202,3 +202,8 @@
     background-color: #673ab7;
     transition: 500ms;
   }
+
+  .arrowButton {
+    color: white;
+    font-size: 2.5rem;
+  }
