@@ -30,22 +30,18 @@ export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridPr
   const [showNote, SetshowNote] = useState(false);
 
 
-/**
+
   useEffect(() => {
-    fetch('http://localhost:5002/boards/retrieve_board/1002')//1002 boardID is mock for testing
-      .then(res => res.json()).then(json => {
-        let sudokuElementList: number[] = json.slice(1).map((element: number) => {
-          return element
-        })
-        setSudokuBoard( sudokuElementList )  
-      })
+    fetch('http://localhost:5002/boards/retrieve_board/' + boardId )
+    .then(res => res.json())
+    .then(json => {
+      console.log(json)
+    })
     .catch(
       error => {
         console.error('Fetch Error:', error)
       } )
-    // eslint-disable-next-line
   }, []);
-  */
 
  //TODO: test version
   useEffect(() => {
@@ -56,8 +52,8 @@ export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridPr
       const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
       const ROW: number= Math.floor(((i/9)+1))
 
-      const provided = element != 0 ? true : false;
-      const correct = provided ? true : (element == ansList[i] ? true : false);
+      const provided = element !== 0 ? true : false;
+      const correct = provided ? true : (element === ansList[i] ? true : false);
 
       let sudokuCellInfo: SudokuElement = {value: element, ans: ansList[i], correct: correct, provided: provided, shaded:false, selected:false, row: ROW, col: COL, note: [] };
       return sudokuCellInfo
@@ -148,7 +144,6 @@ const ansHandler = () => {
     else {
       return { ...element, correct: true , value : element.ans};
     }
-    return element;
   });
   if(showingAnswer){
     setSudokuBoard(tempBoard);
@@ -344,7 +339,7 @@ return <div className={"grid grid-cols-3 items-center"}>
         <div className={styles.actionsSection}>
             {!showNote && <button className={styles.actionButton}>UNDO</button>}
             <button className={styles.actionButton} onClick={eraseHandler}>ERASE</button>
-              <button className={styles.actionButton} onClick={ansHandler}>ANSWER</button>
+            {!showNote && <button className={styles.actionButton} onClick={ansHandler}>ANSWER</button>}
         </div>
       </div>
       <div className={styles.quitButton}>
