@@ -61,7 +61,8 @@ export default function SudokuCell(props: any) {
                                 }
                             </div>
                         :
-                        <p className={`size-16 text-center mt-4`}>{inputNumber === 0 ? "" : inputNumber}</p>
+                        ((props.provided === true) ? <p className={`size-16 text-center mt-4`}><b>{inputNumber === 0 ? "" : inputNumber}</b></p> : <p className={`size-16 text-center mt-4`}>{inputNumber === 0 ? "" : inputNumber}</p>)
+                        
                 }
                 {shaded &&
                     <span className="ease-in-out animate-ping absolute rounded-sm h-8 w-8 bg-purple-100 opacity-90"></span>
