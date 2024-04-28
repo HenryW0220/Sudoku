@@ -12,10 +12,10 @@ import Note from './Note';
 jest.mock('./hooks/useAuth', () => ({
   useAuth: jest.fn()
 }));
-jest.mock('./FullSudokuGrid', () => () => <div>FullSudokuGrid</div>);
+jest.mock('./components/FullSudokuGrid', () => () => <div>FullSudokuGrid</div>);
 jest.mock('./components/AuthForm', () => () => <button>Login Form Button</button>);
 jest.mock('./components/HeaderBar', () => () => <div>HeaderBar</div>);
-jest.mock('./Note', () => () => <div>Note Component</div>);
+jest.mock('./components/Note', () => () => <div>Note Component</div>);
 
 // Testing the App component's behavior based on authentication status
 describe('App Component', () => {
