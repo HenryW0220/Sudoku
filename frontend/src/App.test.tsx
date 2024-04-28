@@ -3,6 +3,7 @@ import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import App from "./App";
 import useAuth from "./hooks/useAuth";
+import { useAuth } from "./hooks/useAuth";
 import FullSudokuGrid from "./components/FullSudokuGrid";
 import AuthForm from "./components/AuthForm";
 import HeaderBar from "./components/HeaderBar";
