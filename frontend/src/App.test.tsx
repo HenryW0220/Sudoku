@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App from './App';
+import App from './App.tsx';
 import { useAuth } from './hooks/useAuth';
-import FullSudokuGrid from './components/FullSudokuGrid';
+import  FullSudokuGrid  from './components/FullSudokuGrid';
 import { AuthForm } from './components/AuthForm';
 import { HeaderBar } from './components/HeaderBar';
 import Note from './components/Note';
