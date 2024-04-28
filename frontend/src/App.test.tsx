@@ -3,19 +3,19 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import App from './App';
 import { useAuth } from './hooks/useAuth';
-import FullSudokuGrid from './FullSudokuGrid';
+import FullSudokuGrid from './components/FullSudokuGrid';
 import { AuthForm } from './components/AuthForm';
 import { HeaderBar } from './components/HeaderBar';
-import Note from './Note';
+import Note from './components/Note';
 
 // Mock hooks and components to isolate the tests from external dependencies
 jest.mock('./hooks/useAuth', () => ({
   useAuth: jest.fn()
 }));
-jest.mock('./FullSudokuGrid', () => () => <div>FullSudokuGrid</div>);
+jest.mock('./components/FullSudokuGrid', () => () => <div>FullSudokuGrid</div>);
 jest.mock('./components/AuthForm', () => () => <button>Login Form Button</button>);
 jest.mock('./components/HeaderBar', () => () => <div>HeaderBar</div>);
-jest.mock('./Note', () => () => <div>Note Component</div>);
+jest.mock('./components/Note', () => () => <div>Note Component</div>);
 
 // Testing the App component's behavior based on authentication status
 describe('App Component', () => {
