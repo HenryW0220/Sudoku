@@ -9,8 +9,9 @@ import HeaderBar from "./components/HeaderBar";
 import Note from "./components/Note";
 
 // Mock hooks and components to isolate the tests from external dependencies
-jest.mock("./hooks/useAuth", () => ({
-  useAuth: jest.fn(),
+jest.mock('./hooks/useAuth', () => ({
+  __esModule: true,
+  default: jest.fn(), // Mocking the default export
 }));
 jest.mock("./components/FullSudokuGrid", () => () => <div>FullSudokuGrid</div>);
 jest.mock("./components/AuthForm", () => () => (
