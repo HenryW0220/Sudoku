@@ -26,8 +26,8 @@ export default function SudokuCell(props: any) {
         // updates number
         setInputNumber(props.initValue);
         // updates color
-        if (props.showingAnswer == true){
-            if (props.provided == true){
+        if (props.showingAnswer === true){
+            if (props.provided === true){
                 setColor("bg-white");
             }
             else {
@@ -51,7 +51,7 @@ export default function SudokuCell(props: any) {
                 {
                     isNote ?
                         inputNumber ?
-                            <p className={`size-16 text-center mt-4`}>{inputNumber == 0 ? "" : inputNumber}</p> : <div className={styles.sudoCell}>
+                            <p className={`size-16 text-center mt-4`}>{inputNumber === 0 ? "" : inputNumber}</p> : <div className={styles.sudoCell}>
                                 {
                                     noteArr.map((n: number, i: number) => {
                                         return <p style={{
@@ -61,7 +61,7 @@ export default function SudokuCell(props: any) {
                                 }
                             </div>
                         :
-                        <p className={`size-16 text-center mt-4`}>{inputNumber == 0 ? "" : inputNumber}</p>
+                        <p className={`size-16 text-center mt-4`}>{inputNumber === 0 ? "" : inputNumber}</p>
                 }
                 {shaded &&
                     <span className="ease-in-out animate-ping absolute rounded-sm h-8 w-8 bg-purple-100 opacity-90"></span>

@@ -28,11 +28,18 @@ export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridPr
   const [selectingListener, setSelectingListener]= useState(false)
   const [showingAnswer, setShowingAnswer] = useState(false);
   const [showNote, SetshowNote] = useState(false);
+  const token = localStorage.getItem("token");
 
 
 
   useEffect(() => {
-    fetch('http://localhost:5002/boards/retrieve_board/' + boardId )
+    fetch('http://localhost:5002/boards/retrieve_board/' + boardId , {
+      method: 'GET',
+      mode: 'no-cors', // Set request mode to "no-cors"
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
     .then(res => res.json())
     .then(json => {
       console.log(json)
