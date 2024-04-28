@@ -19,30 +19,62 @@ jest.mock("./components/AuthForm", () => () => (
 jest.mock("./components/HeaderBar", () => () => <div>HeaderBar</div>);
 jest.mock("./components/Note", () => () => <div>Note Component</div>);
 
-describe('AuthForm Component', () => {
-  it('renders correctly', () => {
+// // Testing the App component's behavior based on authentication status
+// describe("App Component", () => {
+//   it("renders AuthForm when user is not logged in", () => {
+//     useAuth.mockImplementation(() => ({
+//       isLoggedIn: false,
+//       user: null,
+//       onLogin: jest.fn(),
+//       onLogout: jest.fn(),
+//       loadMe: jest.fn(),
+//     }));
+
+//     render(<App />);
+//     expect(screen.getByText("Login Form Button")).toBeInTheDocument();
+//     expect(screen.queryByText("FullSudokuGrid")).not.toBeInTheDocument();
+//   });
+
+//   it("renders HeaderBar and FullSudokuGrid when user is logged in", () => {
+//     useAuth.mockImplementation(() => ({
+//       isLoggedIn: true,
+//       user: { username: "testuser" },
+//       onLogin: jest.fn(),
+//       onLogout: jest.fn(),
+//       loadMe: jest.fn(),
+//     }));
+
+//     render(<App />);
+//     expect(screen.getByText("HeaderBar")).toBeInTheDocument();
+//     expect(screen.getByText("FullSudokuGrid")).toBeInTheDocument();
+//   });
+// });
+
+// Tests for each component to verify they render correctly
+describe("AuthForm Component", () => {
+  it("renders correctly", () => {
     render(<AuthForm />);
-    expect(screen.getByText('Login Form Button')).toBeInTheDocument();
+    expect(screen.getByText("Login Form Button")).toBeInTheDocument();
   });
 });
 
-describe('FullSudokuGrid Component', () => {
-  it('renders correctly', () => {
+describe("FullSudokuGrid Component", () => {
+  it("renders correctly", () => {
     render(<FullSudokuGrid />);
-    expect(screen.getByText('FullSudokuGrid')).toBeInTheDocument();
+    expect(screen.getByText("FullSudokuGrid")).toBeInTheDocument();
   });
 });
 
-describe('HeaderBar Component', () => {
-  it('renders correctly', () => {
+describe("HeaderBar Component", () => {
+  it("renders correctly", () => {
     render(<HeaderBar />);
-    expect(screen.getByText('HeaderBar')).toBeInTheDocument();
+    expect(screen.getByText("HeaderBar")).toBeInTheDocument();
   });
 });
 
-describe('Note Component', () => {
-  it('renders correctly', () => {
+describe("Note Component", () => {
+  it("renders correctly", () => {
     render(<Note />);
-    expect(screen.getByText('Note Component')).toBeInTheDocument();
+    expect(screen.getByText("Note Component")).toBeInTheDocument();
   });
 });
