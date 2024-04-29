@@ -16,16 +16,16 @@ export default function MainMenu() {
     })
   }, []);
 
-  const getBoardLevel = (boardId: number) => {
-    switch(boardId % 3){
+  const getBoardLevelDetails = (boardId: number): { color: string, text: string } => {
+    switch (boardId % 3) {
       case 0:
-        return 'Hard';
+        return { color: 'bg-red-500', text: 'Hard' };
       case 1:
-        return 'Easy';
+        return { color: 'bg-green-500', text: 'Easy' };
       case 2:
-        return 'Medium';
+        return { color: 'bg-yellow-500', text: 'Medium' };
       default:
-        return '';
+        return { color: '', text: '' };
     }
   };
 
@@ -54,12 +54,19 @@ export default function MainMenu() {
       <button className={styles.arrowButton} onClick={handleBackClick} disabled={startIndex === 0}> <b>{"<"}</b> </button>
       <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", padding: "10px" }}>
         {
-          boardIds.slice(startIndex, startIndex + 5).map(id =>
-              <button className={styles.boardButton} key={id} onClick={() => handleBoardClick(id)}>
+          boardIds.slice(startIndex, startIndex + 5).map(id => {
+            const { color, text } = getBoardLevelDetails(id);
+            return (
+              <button
+                key={id}
+                className={`flex flex-col justify-center items-center p-4 text-white ${color} hover:bg-opacity-75 font-semibold mx-1 rounded w-36 h-24`} 
+                onClick={() => handleBoardClick(id)}
+              >
                 <span>Board {id} </span>
-                <span>Level: {getBoardLevel(id)}</span>
+                <span>Level: {text}</span>
               </button>
-          )
+            );
+          })
         }
       </div>
       <button className={styles.arrowButton} onClick={handleNextClick} disabled={(startIndex + 5) >= boardIds.length}> <b>{">"}</b> </button>
