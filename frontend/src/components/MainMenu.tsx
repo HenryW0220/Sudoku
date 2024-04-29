@@ -8,22 +8,37 @@ interface ConfirmationModalProps {
   onConfirm: () => void;
 }
 
-const MainMenu: React.FC = () => {
+const MainMenu = ({ userId }: any) => {
   const [boardIds, setBoardIds] = useState<number[]>([]);
+  const [partialBoardIds, setPartialBoardIds] = useState([]);
+  const [isPartial, setIsPartial] = useState(false);
+  const [saved, isSaved] = useState(true)
+
   const [selectedBoardId, setSelectedBoardId] = useState<number>(0);
   const [startIndex, setStartIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [pendingBoardId, setPendingBoardId] = useState<number>(0);
 
-
   useEffect(() => {
     fetch('http://localhost:5002/boards/retrieve_all_board_ids')
-    .then(res => res.json())
-    .then(json => {
-      setBoardIds(json)
-    })
+      .then(res => res.json())
+      .then(json => {
+        setBoardIds(json)
+      })
   }, []);
 
+  useEffect(() => {
+    fetch(`http://localhost:5002/users/${userId}/partial_boards/retrieve_all_partial_board_ids`)
+      .then(res => res.json())
+      .then(json => {
+        if (json) {
+          const ids = json.map((element: any) => element.board_id)
+          console.log('id', ids)
+          setPartialBoardIds(ids);
+        }
+      })
+    isSaved(false)
+  }, [userId, saved, isSaved, selectedBoardId]);
 
   const getBoardLevelDetails = (boardId: number): { color: string, text: string } => {
     switch (boardId % 3) {
@@ -38,25 +53,26 @@ const MainMenu: React.FC = () => {
     }
   };
 
-  const handleBoardClick = (boardId: number) => {
+  const handleBoardClick = (boardId: number, isPartial: boolean) => {
     if (boardId !== selectedBoardId && selectedBoardId !== 0) {
       setPendingBoardId(boardId);
       setIsModalOpen(true);
     } else {
       setSelectedBoardId(boardId);
     }
+    setIsPartial(isPartial);
   };
 
   const handleNextClick = () => {
     const nextStartIndex = startIndex + 5;
-    if(nextStartIndex < boardIds.length){
+    if (nextStartIndex < boardIds.length) {
       setStartIndex(nextStartIndex);
     }
   };
 
   const handleBackClick = () => {
     const nextStartIndex = startIndex - 5;
-    if(nextStartIndex >= 0){
+    if (nextStartIndex >= 0) {
       setStartIndex(nextStartIndex);
     }
   }
@@ -96,7 +112,9 @@ const MainMenu: React.FC = () => {
     <ConfirmationModal isOpen={isModalOpen} onClose={handleClose} onConfirm={handleConfirm} />
     <h1 className={"font-bold text-3xl text-neutral-200 pb-1"}>Welcome!</h1>
     <h1 className={"font-bold text-3xl text-neutral-200 pb-2"}>Start a New Game:</h1>
-    <div style={{ display: "flex", flexDirection: "row"}}>
+    <div style={{ display: "flex", flexDirection: "row" }}>
+      <button className={styles.arrowButton} onClick={handleBackClick} disabled={startIndex === 0}> <b>{"<"}</b> </button>
+
       <button className={styles.arrowButton} onClick={handleBackClick} disabled={startIndex === 0}> <b>{"<"}</b> </button>
       <div style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", padding: "10px" }}>
         {
@@ -105,9 +123,25 @@ const MainMenu: React.FC = () => {
             return (
               <button
                 key={id}
-                className={`flex flex-col justify-center items-center p-4 text-white ${color} hover:bg-opacity-75 font-semibold mx-1 rounded w-36 h-24`} 
-                onClick={() => handleBoardClick(id)}
+                className={`flex flex-col justify-center items-center p-4 text-white ${color} hover:bg-opacity-75 font-semibold mx-1 rounded w-36 h-24`}
+                onClick={() => handleBoardClick(id, false)}
               >
+                <span>Board {id} </span>
+                <span>Level: {text}</span>
+              </button>
+            );
+          })
+        }
+        {
+          partialBoardIds.length > 0 && partialBoardIds.slice(startIndex, startIndex + 5).map(id => {
+            const { color, text } = getBoardLevelDetails(id);
+            return (
+              <button
+                key={id}
+                className={`flex flex-col justify-center items-center p-4 text-white ${color} hover:bg-opacity-75 font-semibold mx-1 rounded w-36 h-24`}
+                onClick={() => handleBoardClick(id, true)}
+              >
+                <span> Continue Playing?</span>
                 <span>Board {id} </span>
                 <span>Level: {text}</span>
               </button>
@@ -116,10 +150,11 @@ const MainMenu: React.FC = () => {
         }
       </div>
       <button className={styles.arrowButton} onClick={handleNextClick} disabled={(startIndex + 5) >= boardIds.length}> <b>{">"}</b> </button>
+
     </div>
 
     {
-      selectedBoardId !== 0 ? (<FullSudokuGrid boardId={selectedBoardId} resetBoardId={setSelectedBoardId} />) : null
+      selectedBoardId !== 0 ? (<FullSudokuGrid boardId={selectedBoardId} resetBoardId={setSelectedBoardId} userId={userId} isPartial={isPartial} saved={saved} isSaved={isSaved} />) : null
     }
   </>
 }

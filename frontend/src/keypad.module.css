@@ -194,12 +194,31 @@
     cursor: pointer;
     font-size: 1rem;
   }
-
+  .saveButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 10px;
+    height: 40px;
+    width: 80px;
+    background-color: #CBC3E3; 
+    border: 1px solid #000000;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
   .boardButton:hover,
+  .saveButton:hover,
   .quitButton:hover {
     background-color: #673ab7;
     transition: 500ms;
   }
+  .arrowButton {
+    color: white;
+    font-size: 2.5rem;
+  }
+
 
   .arrowButton {
     color: white;

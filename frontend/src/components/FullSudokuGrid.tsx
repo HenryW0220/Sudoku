@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import SudokuCell from "./SudokuCell";
 import styles from '../keypad.module.css'; 
 import Note from "./Note";
@@ -20,9 +20,13 @@ interface SudokuElement {
 interface FullSudokuGridProps{
   boardId: number;
   resetBoardId: (boardId: number) => void;
+  userId: number;
+  isPartial: boolean;
+  saved: boolean;
+  isSaved: (isSaved: boolean) => void;
 }
 
-export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridProps) {
+export default function FullSudokuGrid({boardId, resetBoardId, userId, isPartial, saved, isSaved}: FullSudokuGridProps) {
   //contain api sudoku board values
   const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([]) // currently displayed board
   const [tempBoard, setTempBoard] = useState<SudokuElement[]>([]) // temp board for hiding the answer again
@@ -31,23 +35,42 @@ export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridPr
   const [showNote, SetshowNote] = useState(false);
 
 
-
   useEffect(() => {
+    let partialBoard: any;
+    console.log(isPartial)
+
+    if (isPartial){
+      fetch(`http://localhost:5002/users/${userId}/partial_boards/retrieve_partial_board/${boardId}` , {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(res => res.json())
+      .then(json => {
+        console.log(json)
+        partialBoard = json.partial_board_contents;
+
+      })
+      
+    }
+    
     fetch('http://localhost:5002/boards/retrieve_board/' + boardId , {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-      },
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json",
+    },
     })
     .then(res => res.json())
     .then(json => {
       console.log(json)
-      let sudokuElementList: SudokuElement[] = json.board_contents.map((element: number, i: number) => {
+      let user_board = (isPartial ? partialBoard : json.board_contents);
+      let sudokuElementList: SudokuElement[] = user_board.map((element: number, i: number) => {
 
         const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
         const ROW: number= Math.floor(((i/9)+1))
   
-        const provided = element !== 0 ? true : false;
+        const provided = (isPartial ? (json.board_contents[i] !== 0 ? true : false ) : (element !== 0 ? true : false));
         const correct = provided ? true : (element === json.board_answer[i] ? true : false);
   
         let sudokuCellInfo: SudokuElement = {value: element, ans: json.board_answer[i], correct: correct, provided: provided, shaded:false, selected:false, row: ROW, col: COL, note: [] };
@@ -59,6 +82,7 @@ export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridPr
       error => {
         console.error('Fetch Error:', error)
       } )
+    
   }, [boardId]);
 
 
@@ -167,6 +191,28 @@ const eraseHandler = () => {
     }
     return newElement;
   }));
+}
+
+const saveHandler = async() => {
+  const response = await fetch(`http://localhost:5002/users/${userId}/partial_boards/store_partial_board/${boardId}`, { //10 is mock boardID replace with ${boardId}
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      partial_board_contents: sudokuBoard.map((element) => element.value)
+    })
+  })
+
+  if (response.ok) {
+    isSaved(true)
+    saved = true
+    alert("Board Saved Successfully")
+    resetBoardId(0);
+  } else {
+    alert("Error Saving Board")
+  
+  }
 }
 
 
@@ -345,8 +391,13 @@ return <div className={"grid grid-cols-3 items-center"}>
             {!showNote && <button className={styles.actionButton} onClick={ansHandler}>ANSWER</button>}
         </div>
       </div>
-      <div className={styles.quitButton}>
-              <button onClick={handleBackClick}>QUIT</button>
+      <div className="flex">
+        <div className={styles.quitButton}>
+                <button onClick={handleBackClick}>QUIT</button>
+        </div>
+        <div className={styles.saveButton}>
+                <button onClick={saveHandler}>SAVE</button>
+        </div>
       </div>
     </div>
   </div>

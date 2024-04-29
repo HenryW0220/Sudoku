@@ -115,7 +115,7 @@ def retrieve_all_partial_board_ids(user_id):
     # Connect to MySQL DB
     connection, cursor = get_db_connection()
     cursor.execute('USE TEST_DB')
-    cursor.execute('SELECT * FROM PartialBoard')
+    cursor.execute('SELECT * FROM PartialBoard WHERE user_id = %s', (user_id,))
     boards = cursor.fetchall()
     connection.close()
 
@@ -413,7 +413,7 @@ def me():
 
     if user is not None:
         # Return the user's information
-        return jsonify({"message": "User found", "username": user['user_name']}), 200
+        return jsonify({"message": "User found", "username": user['user_name'], "user_id": user["user_id"]}), 200
     else:
         return jsonify({"message": "User not found"}), 404
 
