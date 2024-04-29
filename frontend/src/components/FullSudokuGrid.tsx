@@ -70,7 +70,7 @@ export default function FullSudokuGrid({boardId, resetBoardId, userId, isPartial
         const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
         const ROW: number= Math.floor(((i/9)+1))
   
-        const provided = element !== 0 ? true : false;
+        const provided = (isPartial ? (json.board_contents[i] !== 0 ? true : false ) : (element !== 0 ? true : false));
         const correct = provided ? true : (element === json.board_answer[i] ? true : false);
   
         let sudokuCellInfo: SudokuElement = {value: element, ans: json.board_answer[i], correct: correct, provided: provided, shaded:false, selected:false, row: ROW, col: COL, note: [] };
