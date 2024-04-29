@@ -180,7 +180,7 @@
   border: 1px solid #000000;
   border-radius: 5px;
   cursor: pointer; 
-  font-size: 15px; 
+  font-size: 1rem; 
 }
   .quitButton { 
     display: flex;
@@ -201,4 +201,9 @@
   .quitButton:hover {
     background-color: #673ab7;
     transition: 500ms;
+  }
+
+  .arrowButton {
+    color: white;
+    font-size: 2.5rem;
   }
