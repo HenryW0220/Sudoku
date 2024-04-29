@@ -13,15 +13,8 @@ def mock_get_db_connection(fetchone_return_value):
         return connection, cursor
     return mock_db_connection
 
+# This is for select all statements in the endpoints
 def mock_get_all_db_connection(fetchall_return_value):
-    def mock_db_connection():
-        connection = MagicMock()
-        cursor = MagicMock()
-        cursor.fetchall.return_value = [(board_id,) for board_id in fetchall_return_value]
-        return connection, cursor
-    return mock_db_connection
-
-def mock_get__db_connection(fetchall_return_value):
     def mock_db_connection():
         connection = MagicMock()
         cursor = MagicMock()
@@ -92,7 +85,7 @@ def test_retrieve_board_not_found(client, monkeypatch):
 def test_retrieve_all_board_ids(client, monkeypatch):
     expected_board_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-    monkeypatch.setattr('app.get_db_connection', mock_get_all_db_connection(expected_board_ids))
+    monkeypatch.setattr('app.get_db_connection', mock_get_all_db_connection([(board_id,) for board_id in expected_board_ids]))
 
     response = client.get('/boards/retrieve_all_board_ids')
 
@@ -102,7 +95,7 @@ def test_retrieve_all_board_ids(client, monkeypatch):
 def test_retrieve_all_users(client, monkeypatch):
     expected_users = [(1, 'User1'), (2, 'User2'), (3, 'User3')]
 
-    monkeypatch.setattr('app.get_db_connection', mock_get__db_connection(expected_users))
+    monkeypatch.setattr('app.get_db_connection', mock_get_all_db_connection(expected_users))
 
     response = client.get('/users/retrieve_all_users')
 
@@ -193,7 +186,7 @@ def test_register_success(client, monkeypatch):
     assert response.status_code == 201
     assert response.json == {"message": "User registered successfully"}
 
-def test_me_success(client, monkeypatch):
+def test_me_unsuccess(client, monkeypatch):
     jwt_identity = 'test_user'
 
     monkeypatch.setattr('app.get_jwt_identity', lambda: jwt_identity)
