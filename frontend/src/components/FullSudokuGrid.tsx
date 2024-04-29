@@ -129,13 +129,11 @@ const fillSudokuCell = (number: number) => {
     // Unshade all other cells
     return newCell;
   });
-
   setSudokuBoard(newSudokuBoard);
   setSelectingListener(false); // Reset listener state after input
 };
 
 const ansHandler = () => {
-
   const updatedSudokuElementList = sudokuBoard.map((element) => {
     // If the value is different from the ans, set shaded to true and correct value
     if (element.value !== element.ans) {
@@ -154,20 +152,23 @@ const ansHandler = () => {
     setSudokuBoard(updatedSudokuElementList); // shows ans
     setShowingAnswer(true);
   }
-  
 }
 
 const eraseHandler = () => {
-  setSelectingListener(false)
+  setSelectingListener(false);
   setSudokuBoard(sudokuBoard.map((element) => {
-    if (element.shaded === true) element.shaded = false
+    let newElement = { ...element, selected: false, shaded: false }; // Deselect and unshade by default
+
     if (element.selected && showNote) {
-      return { ...element, note:[] };
+      return { ...newElement, note: [] };  // Clear notes if in note mode
     }
-    element.selected=false;
-    return element;
+    if (element.selected && !element.provided && element.value !== 0) {
+      return { ...newElement, value: 0 };  // Reset value if conditions met
+    }
+    return newElement;
   }));
 }
+
 
   const handleBackClick = () => {
     // Indicates no board has been chosen
@@ -340,7 +341,6 @@ return <div className={"grid grid-cols-3 items-center"}>
         </div>
 
         <div className={styles.actionsSection}>
-            {!showNote && <button className={styles.actionButton}>UNDO</button>}
             <button className={styles.actionButton} onClick={eraseHandler}>ERASE</button>
             {!showNote && <button className={styles.actionButton} onClick={ansHandler}>ANSWER</button>}
         </div>
