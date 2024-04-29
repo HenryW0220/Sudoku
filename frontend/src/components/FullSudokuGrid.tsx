@@ -35,11 +35,12 @@ export default function FullSudokuGrid({boardId, resetBoardId, userId, isPartial
   const [showNote, SetshowNote] = useState(false);
 
 
-
   useEffect(() => {
     let partialBoard: any;
+    console.log(isPartial)
+
     if (isPartial){
-      fetch(`/users/${userId}/partial_boards/retrieve_partial_board/${boardId}` , {
+      fetch(`http://localhost:5002/users/${userId}/partial_boards/retrieve_partial_board/${boardId}` , {
         method: 'GET',
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +48,9 @@ export default function FullSudokuGrid({boardId, resetBoardId, userId, isPartial
       })
       .then(res => res.json())
       .then(json => {
+        console.log(json)
         partialBoard = json.partial_board_contents;
+
       })
       
     }
