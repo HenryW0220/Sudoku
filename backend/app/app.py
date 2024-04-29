@@ -84,7 +84,9 @@ def retrieve_board(board_id):
     print(result)
     if result:
         # Get board contents from the query result
-        board_id, board_contents, board_answer = result
+        board_id = result[0]
+        board_contents = result[1]
+        board_answer = result[2]
 
         board_contents = [int(num)
                           for num in board_contents.split()]
