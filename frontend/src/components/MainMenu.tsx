@@ -2,15 +2,22 @@ import { useEffect, useState } from "react";
 import styles from "../keypad.module.css"
 import FullSudokuGrid from "./FullSudokuGrid";
 
-export default function MainMenu({ userId }: any) {
+interface ConfirmationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}
 
-  const [boardIds, setBoardIds] = useState([]);
+const MainMenu = ({ userId }: any) => {
+  const [boardIds, setBoardIds] = useState<number[]>([]);
   const [partialBoardIds, setPartialBoardIds] = useState([]);
-  const [selectedBoardId, setSelectedBoardId] = useState(0);
   const [isPartial, setIsPartial] = useState(false);
-  const [startIndex, setStartIndex] = useState(0)
   const [saved, isSaved] = useState(true)
 
+  const [selectedBoardId, setSelectedBoardId] = useState<number>(0);
+  const [startIndex, setStartIndex] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [pendingBoardId, setPendingBoardId] = useState<number>(0);
 
   useEffect(() => {
     fetch('http://localhost:5002/boards/retrieve_all_board_ids')
@@ -47,7 +54,12 @@ export default function MainMenu({ userId }: any) {
   };
 
   const handleBoardClick = (boardId: number, isPartial: boolean) => {
-    setSelectedBoardId(boardId);
+    if (boardId !== selectedBoardId && selectedBoardId !== 0) {
+      setPendingBoardId(boardId);
+      setIsModalOpen(true);
+    } else {
+      setSelectedBoardId(boardId);
+    }
     setIsPartial(isPartial);
   };
 
@@ -65,7 +77,39 @@ export default function MainMenu({ userId }: any) {
     }
   }
 
+  const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, onConfirm }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="bg-white p-4 rounded-lg shadow-lg z-50">
+          <h2 className="text-lg font-bold mb-4">Confirm New Game</h2>
+          <p>Are you sure you want to start a new game with this level?</p>
+          <div className="flex justify-end space-x-2 mt-4">
+            <button onClick={onClose} className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600">
+              Cancel
+            </button>
+            <button onClick={onConfirm} className="bg-purple-500 text-white py-2 px-4 rounded hover:bg-purple-600">
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const handleConfirm = () => {
+    setSelectedBoardId(pendingBoardId);
+    setIsModalOpen(false);
+  };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
+
+
   return <>
+    <ConfirmationModal isOpen={isModalOpen} onClose={handleClose} onConfirm={handleConfirm} />
     <h1 className={"font-bold text-3xl text-neutral-200 pb-1"}>Welcome!</h1>
     <h1 className={"font-bold text-3xl text-neutral-200 pb-2"}>Start a New Game:</h1>
     <div style={{ display: "flex", flexDirection: "row" }}>
@@ -114,3 +158,5 @@ export default function MainMenu({ userId }: any) {
     }
   </>
 }
+
+export default MainMenu;
