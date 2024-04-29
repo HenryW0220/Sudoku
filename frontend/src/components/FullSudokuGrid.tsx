@@ -59,7 +59,7 @@ export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridPr
       error => {
         console.error('Fetch Error:', error)
       } )
-  }, []);
+  }, [boardId]);
 
 
 
