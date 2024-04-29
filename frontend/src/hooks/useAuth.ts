@@ -1,43 +1,44 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+// In the useAuth hook
 export const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // Define the state variable for the user
   const [user, setUser] = useState<any>(null);
+  const [userId, setUserId] = useState<any>(null);
 
-  // Define a function to log out
   const onLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
   };
-  // Define a function to log in
-  const onLogin = (user: any) => {
-    setUser(user);
+
+  const onLogin = (userData: any) => {
+    setUser(userData.username);
     setIsLoggedIn(true);
+    // Call loadMe only when the user logs in
+    loadMe();
   };
 
   const loadMe = async () => {
-    // Get the token from local storage
     const token = localStorage.getItem("token");
-    // If the token exists, fetch the user
     if (token) {
-      const response = await fetch("http://localhost:5002/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      // If the response is ok, set the user state
-      if (response.ok) {
-        response
-          .json()
-          .then((data) => {
-            setUser(data);
-            setIsLoggedIn(true);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+      try {
+        const response = await fetch("http://localhost:5002/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.ok) {
+          const userData = await response.json();
+          console.log("user", userData.user_id, userData.username);
+          setUser(userData.username);
+          setUserId(userData.user_id);
+          
+        } else {
+          console.error("Error:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error:", error);
       }
     }
   };
@@ -48,6 +49,6 @@ export const useAuth = () => {
     onLogin,
     onLogout,
     user,
-    loadMe,
+    userId,
   };
 };

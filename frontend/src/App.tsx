@@ -1,18 +1,14 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import MainMenu from './components/MainMenu';
 import { AuthForm } from "./components/AuthForm";
 import { HeaderBar } from "./components/HeaderBar";
 import { useAuth } from "./hooks/useAuth";
 import "./App.css";
 
+// In the App component
 function App() {
-  const { isLoggedIn, onLogin, onLogout, user, loadMe } = useAuth();
-
-  // Define an effect to run when the component mounts
-  useEffect(() => {
-    // Call the loadMe function
-    loadMe();
-  }, [loadMe]);
+  const { isLoggedIn, onLogin, onLogout, user, userId } = useAuth();
+  console.log('userId', userId)
 
   return (
     <div className={"bg-indigo-900 h-screen w-full flex flex-col items-center overflow-y-auto"}>
@@ -21,9 +17,10 @@ function App() {
       <p className={"font-bold text-5xl text-neutral-200 pt-12 pb-8"}>Psudoku</p>
 
       {
-        isLoggedIn ? (<MainMenu />) : (<AuthForm onLogin={onLogin}></AuthForm>)
+        isLoggedIn ? (<MainMenu userId={userId} />) : (<AuthForm onLogin={onLogin} ></AuthForm>)
       }
     </div>
   );
 }
+
 export default App;

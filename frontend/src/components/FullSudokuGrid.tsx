@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import SudokuCell from "./SudokuCell";
 import styles from '../keypad.module.css'; 
 import Note from "./Note";
@@ -17,16 +17,20 @@ interface SudokuElement {
 interface FullSudokuGridProps{
   boardId: number;
   resetBoardId: (boardId: number) => void;
+  userId: number;
+  isPartial: boolean;
+  saved: boolean;
+  isSaved: (isSaved: boolean) => void;
 }
 
-export default function FullSudokuGrid({boardId, resetBoardId}: FullSudokuGridProps) {
+export default function FullSudokuGrid({boardId, resetBoardId, userId, isPartial, saved, isSaved}: FullSudokuGridProps) {
   //contain api sudoku board values
   const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([])
 
   const [selectingListener, setSelectingListener]= useState(false)
 
-
   const [showNote, SetshowNote] = useState(false);
+
 
 /**
   useEffect(() => {
@@ -145,6 +149,31 @@ const eraseHandler = () => {
     return element;
   }));
 }
+
+const saveHandler = async() => {
+  const response = await fetch(`http://localhost:5002/users/${userId}/partial_boards/store_partial_board/13`, { //10 is mock boardID replace with ${boardId}
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      partial_board_contents: sudokuBoard.map((element) => element.value)
+    })
+  })
+
+  console.log(response)
+  if (response.ok) {
+    isSaved(true)
+    saved = true
+    console.log('savedSB', saved)
+    alert("Board Saved Successfully")
+    resetBoardId(0);
+  } else {
+    alert("Error Saving Board")
+  
+  }
+}
+
 
   const handleBackClick = () => {
     // Indicates no board has been chosen
@@ -291,8 +320,13 @@ return <div className={"grid grid-cols-3 items-center"}>
             <button className={styles.actionButton} onClick={eraseHandler}>ERASE</button>
         </div>
       </div>
-      <div className={styles.quitButton}>
-              <button onClick={handleBackClick}>QUIT</button>
+      <div className="flex">
+        <div className={styles.quitButton}>
+                <button onClick={handleBackClick}>QUIT</button>
+        </div>
+        <div className={styles.saveButton}>
+                <button onClick={saveHandler}>SAVE</button>
+        </div>
       </div>
     </div>
   </div>
