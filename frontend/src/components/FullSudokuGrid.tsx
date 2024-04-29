@@ -2,10 +2,13 @@ import { useState, useEffect, SetStateAction } from "react";
 import SudokuCell from "./SudokuCell";
 import styles from '../keypad.module.css'; 
 import Note from "./Note";
+import Stopwatch from "./StopWatch";
 
 //explicitly telling the machine what our sudokuBoard array elements are
 interface SudokuElement {
   value: number;
+  ans : number;
+  correct : boolean;
   provided: boolean;
   shaded: boolean;
   selected: boolean;
@@ -25,46 +28,43 @@ interface FullSudokuGridProps{
 
 export default function FullSudokuGrid({boardId, resetBoardId, userId, isPartial, saved, isSaved}: FullSudokuGridProps) {
   //contain api sudoku board values
-  const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([])
-
+  const [sudokuBoard, setSudokuBoard] = useState<SudokuElement[]>([]) // currently displayed board
+  const [tempBoard, setTempBoard] = useState<SudokuElement[]>([]) // temp board for hiding the answer again
   const [selectingListener, setSelectingListener]= useState(false)
-
+  const [showingAnswer, setShowingAnswer] = useState(false);
   const [showNote, SetshowNote] = useState(false);
 
 
-/**
+
   useEffect(() => {
-    fetch('http://localhost:5002/boards/retrieve_board/1002')//1002 boardID is mock for testing
-      .then(res => res.json()).then(json => {
-        let sudokuElementList: number[] = json.slice(1).map((element: number) => {
-          return element
-        })
-        setSudokuBoard( sudokuElementList )  
+    fetch('http://localhost:5002/boards/retrieve_board/' + boardId , {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(res => res.json())
+    .then(json => {
+      console.log(json)
+      let sudokuElementList: SudokuElement[] = json.board_contents.map((element: number, i: number) => {
+
+        const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
+        const ROW: number= Math.floor(((i/9)+1))
+  
+        const provided = element !== 0 ? true : false;
+        const correct = provided ? true : (element === json.board_answer[i] ? true : false);
+  
+        let sudokuCellInfo: SudokuElement = {value: element, ans: json.board_answer[i], correct: correct, provided: provided, shaded:false, selected:false, row: ROW, col: COL, note: [] };
+        return sudokuCellInfo
       })
+      setSudokuBoard( sudokuElementList )  
+    })
     .catch(
       error => {
         console.error('Fetch Error:', error)
       } )
-    // eslint-disable-next-line
-  }, []);
-  */
+  }, [boardId]);
 
- //TODO: test version
-  useEffect(() => {
-    let json: number[]= [4,0,7,2,1,6,0,9,3,0,3,0,4,5,0,6,7,0,0,0,9,3,0,7,4,0,0,1,0,8,0,6,4,0,3,0,9,7,6,0,0,0,0,2,4,3,0,5,0,7,0,9,6,1,8,9,2,0,0,3,0,5,0,5,0,3,7,0,8,0,4,0,7,6,0,5,0,1,3,8,0] 
-    let sudokuElementList: SudokuElement[] = json.map((element: number, i) => {
-
-      const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
-      const ROW: number= Math.floor(((i/9)+1))
-
-      const provided = element != 0 ? true : false;
-
-      let sudokuCellInfo: SudokuElement = {value: element, shaded:false, selected:false, row: ROW, col: COL, provided: provided, note: [] };
-      return sudokuCellInfo
-    })
-    setSudokuBoard( sudokuElementList )  
-    // eslint-disable-next-line
-  }, []);
 
 
   //helper method to set up all sudoku board sectors
@@ -133,25 +133,48 @@ const fillSudokuCell = (number: number) => {
     // Unshade all other cells
     return newCell;
   });
-
   setSudokuBoard(newSudokuBoard);
   setSelectingListener(false); // Reset listener state after input
 };
 
-const eraseHandler = () => {
-  setSelectingListener(false)
-  setSudokuBoard(sudokuBoard.map((element) => {
-    if (element.shaded === true) element.shaded = false
-    if (element.selected && showNote) {
-      return { ...element, note:[] };
+const ansHandler = () => {
+  const updatedSudokuElementList = sudokuBoard.map((element) => {
+    // If the value is different from the ans, set shaded to true and correct value
+    if (element.value !== element.ans) {
+      return { ...element, correct: false , value : element.ans};
     }
-    element.selected=false;
-    return element;
+    else {
+      return { ...element, correct: true , value : element.ans};
+    }
+  });
+  if(showingAnswer){
+    setSudokuBoard(tempBoard);
+    setShowingAnswer(false);
+  }
+  else {
+    setTempBoard(sudokuBoard); // saves current board
+    setSudokuBoard(updatedSudokuElementList); // shows ans
+    setShowingAnswer(true);
+  }
+}
+
+const eraseHandler = () => {
+  setSelectingListener(false);
+  setSudokuBoard(sudokuBoard.map((element) => {
+    let newElement = { ...element, selected: false, shaded: false }; // Deselect and unshade by default
+
+    if (element.selected && showNote) {
+      return { ...newElement, note: [] };  // Clear notes if in note mode
+    }
+    if (element.selected && !element.provided && element.value !== 0) {
+      return { ...newElement, value: 0 };  // Reset value if conditions met
+    }
+    return newElement;
   }));
 }
 
 const saveHandler = async() => {
-  const response = await fetch(`http://localhost:5002/users/${userId}/partial_boards/store_partial_board/13`, { //10 is mock boardID replace with ${boardId}
+  const response = await fetch(`http://localhost:5002/users/${userId}/partial_boards/store_partial_board/${boardId}`, { //10 is mock boardID replace with ${boardId}
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -161,11 +184,9 @@ const saveHandler = async() => {
     })
   })
 
-  console.log(response)
   if (response.ok) {
     isSaved(true)
     saved = true
-    console.log('savedSB', saved)
     alert("Board Saved Successfully")
     resetBoardId(0);
   } else {
@@ -195,6 +216,9 @@ return <div className={"grid grid-cols-3 items-center"}>
               shaded={sudokuElement.shaded}
               row={sudokuElement.row}
               col={sudokuElement.col}
+              provided={sudokuElement.provided}
+              correct={sudokuElement.correct}
+              showingAnswer={showingAnswer}
               sudokuCellSelected={sudokuCellSelected}></SudokuCell>
           </div>)
           }
@@ -207,6 +231,9 @@ return <div className={"grid grid-cols-3 items-center"}>
               shaded={sudokuElement.shaded}
               row={sudokuElement.row}
               col={sudokuElement.col}
+              provided={sudokuElement.provided}
+              correct={sudokuElement.correct}
+              showingAnswer={showingAnswer}
               sudokuCellSelected={sudokuCellSelected}></SudokuCell>
           </div>)
           }
@@ -219,6 +246,9 @@ return <div className={"grid grid-cols-3 items-center"}>
                 shaded={sudokuElement.shaded}
                 row={sudokuElement.row}
                 col={sudokuElement.col}
+                provided={sudokuElement.provided}
+                correct={sudokuElement.correct}
+                showingAnswer={showingAnswer}
                 sudokuCellSelected={sudokuCellSelected}></SudokuCell>
             </div>)
           }
@@ -231,6 +261,9 @@ return <div className={"grid grid-cols-3 items-center"}>
                 shaded={sudokuElement.shaded}
                 row={sudokuElement.row}
                 col={sudokuElement.col}
+                provided={sudokuElement.provided}
+                correct={sudokuElement.correct}
+                showingAnswer={showingAnswer}
                 sudokuCellSelected={sudokuCellSelected}></SudokuCell>
             </div>)
           }
@@ -243,6 +276,9 @@ return <div className={"grid grid-cols-3 items-center"}>
                 shaded={sudokuElement.shaded}
                 row={sudokuElement.row}
                 col={sudokuElement.col}
+                provided={sudokuElement.provided}
+                correct={sudokuElement.correct}
+                showingAnswer={showingAnswer}
                 sudokuCellSelected={sudokuCellSelected}></SudokuCell>
             </div>)
           }
@@ -255,6 +291,9 @@ return <div className={"grid grid-cols-3 items-center"}>
                 shaded={sudokuElement.shaded}
                 row={sudokuElement.row}
                 col={sudokuElement.col}
+                provided={sudokuElement.provided}
+                correct={sudokuElement.correct}
+                showingAnswer={showingAnswer}
                 sudokuCellSelected={sudokuCellSelected}></SudokuCell>
             </div>)
           }
@@ -267,6 +306,9 @@ return <div className={"grid grid-cols-3 items-center"}>
                 shaded={sudokuElement.shaded}
                 row={sudokuElement.row}
                 col={sudokuElement.col}
+                provided={sudokuElement.provided}
+                correct={sudokuElement.correct}
+                showingAnswer={showingAnswer}
                 sudokuCellSelected={sudokuCellSelected}></SudokuCell>
             </div>)
           }
@@ -279,6 +321,9 @@ return <div className={"grid grid-cols-3 items-center"}>
                 shaded={sudokuElement.shaded}
                 row={sudokuElement.row}
                 col={sudokuElement.col}
+                provided={sudokuElement.provided}
+                correct={sudokuElement.correct}
+                showingAnswer={showingAnswer}
                 sudokuCellSelected={sudokuCellSelected}></SudokuCell>
             </div>)
           }
@@ -291,6 +336,9 @@ return <div className={"grid grid-cols-3 items-center"}>
                 shaded={sudokuElement.shaded}
                 row={sudokuElement.row}
                 col={sudokuElement.col}
+                provided={sudokuElement.provided}
+                correct={sudokuElement.correct}
+                showingAnswer={showingAnswer}
                 sudokuCellSelected={sudokuCellSelected}></SudokuCell>
               </div>)
           }
@@ -299,6 +347,9 @@ return <div className={"grid grid-cols-3 items-center"}>
   }
 </div>}
 <div>
+  <div>
+    <Stopwatch/>
+  </div>
   <div className={"col-span-1"}>
     <div className={styles.keypadContainer}>
         <div className={styles.modeContainer}>
@@ -316,8 +367,8 @@ return <div className={"grid grid-cols-3 items-center"}>
         </div>
 
         <div className={styles.actionsSection}>
-            {!showNote && <button className={styles.actionButton}>UNDO</button>}
             <button className={styles.actionButton} onClick={eraseHandler}>ERASE</button>
+            {!showNote && <button className={styles.actionButton} onClick={ansHandler}>ANSWER</button>}
         </div>
       </div>
       <div className="flex">
