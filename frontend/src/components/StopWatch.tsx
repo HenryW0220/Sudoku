@@ -41,11 +41,9 @@ const Stopwatch: React.FC = () => {
     };
 
     return (
-        <div className={styles.keypadContainer}>
         <div className={styles.modeContainer}>
             <h1 className={styles.modeLabel} >Stopwatch:</h1>
-            <p className={styles.modeLabel} style={{textAlign:'center'}}>{formatTime()}</p>
-        </div>
+            <p className={styles.modeLabel} style={{textAlign:'center'}}>{formatTime()}</p>        
             <div className={styles.modeSection}>
                 <button className={styles.actionButton} onClick={startStopwatch}>Start</button>
                 <button className={styles.actionButton} onClick={stopStopwatch}>Stop</button>
