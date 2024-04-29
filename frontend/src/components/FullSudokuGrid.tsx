@@ -37,16 +37,32 @@ export default function FullSudokuGrid({boardId, resetBoardId, userId, isPartial
 
 
   useEffect(() => {
+    let partialBoard: any;
+    if (isPartial){
+      fetch(`/users/${userId}/partial_boards/retrieve_partial_board/${boardId}` , {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(res => res.json())
+      .then(json => {
+        partialBoard = json.partial_board_contents;
+      })
+      
+    }
+    
     fetch('http://localhost:5002/boards/retrieve_board/' + boardId , {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-      },
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json",
+    },
     })
     .then(res => res.json())
     .then(json => {
       console.log(json)
-      let sudokuElementList: SudokuElement[] = json.board_contents.map((element: number, i: number) => {
+      let user_board = (isPartial ? partialBoard : json.board_contents);
+      let sudokuElementList: SudokuElement[] = user_board.map((element: number, i: number) => {
 
         const COL: number= (((i +1)%9) ===0) ? 9 : ((i +1)%9)
         const ROW: number= Math.floor(((i/9)+1))
@@ -63,6 +79,7 @@ export default function FullSudokuGrid({boardId, resetBoardId, userId, isPartial
       error => {
         console.error('Fetch Error:', error)
       } )
+    
   }, [boardId]);
 
 
