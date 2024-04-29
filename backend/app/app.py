@@ -35,7 +35,7 @@ def get_db_connection():
 
 """
 
-
+# test_retrieve_all_board_ids
 @app.get('/boards/retrieve_all_board_ids')
 def retrieve_all_board_ids():
     """
@@ -58,7 +58,7 @@ def retrieve_all_board_ids():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-
+# test_retrieve_board_found
 @app.get('/boards/retrieve_board/<int:board_id>')
 def retrieve_board(board_id):
     """
@@ -237,7 +237,7 @@ def retrieve_user(user_id):
 
 """
 
-
+# test_store_board_success
 @app.post('/boards/store_board/<int:board_id>')
 def store_board(board_id):
     """
