@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import SudokuCell from "./SudokuCell";
 import styles from '../keypad.module.css'; 
 import Note from "./Note";
+import Stopwatch from "./StopWatch";
 
 //explicitly telling the machine what our sudokuBoard array elements are
 interface SudokuElement {
@@ -270,6 +271,9 @@ return <div className={"grid grid-cols-3 items-center"}>
   }
 </div>}
 <div>
+  <div>
+    <Stopwatch/>
+  </div>
   <div className={"col-span-1"}>
     <div className={styles.keypadContainer}>
         <div className={styles.modeContainer}>
